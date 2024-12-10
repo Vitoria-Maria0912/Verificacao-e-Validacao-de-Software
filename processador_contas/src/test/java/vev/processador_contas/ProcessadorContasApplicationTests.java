@@ -1,11 +1,10 @@
 package vev.processador_contas;
 
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
 
 @SpringBootTest
 @Transactional
@@ -13,13 +12,12 @@ class ProcessadorContasApplicationTests {
 
     Conta conta;
     Fatura fatura;
-    Pagamento pagamento;
     ProcessadorContas processadorContas;
 
     @BeforeEach
     void setUp() {
-        this.conta = new Conta();
-        this.fatura = new Fatura();
+        this.conta = new Conta((LocalDate.of(2024, 07, 24)), 1000);
+        this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
         this.processadorContas = new ProcessadorContas();
     }
 
@@ -28,23 +26,33 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("Verifica se valorSomaTotal >= valorFatura, fatura.Status == paga")
-    void testVerificaSeValorSomaTotalFatura() {}
+    void testVerificaSeValorSomaTotalFatura() {
+        assert(this.fatura.getStatus() == FaturaStatus.PAGA);
+    }
 
     @Test
     @DisplayName("Verifica se valorSomaTotal < valorFatura, fatura.Status ==  pendente")
-    void testVerificaSeValorSomaTotalPendente() {}
+    void testVerificaSeValorSomaTotalPendente() {
+        assert(this.fatura.getStatus() == FaturaStatus.PENDENTE);
+    }
 
     @Test
     @DisplayName("fatura.getData()")
-    void testFaturaData() {}
+    void testFaturaData() {
+        assert(this.fatura.getData() == (LocalDate.of(2024, 07, 24)));
+    }
 
     @Test
     @DisplayName("fatura.getValorTotal()")
-    void testFaturaValorTotal() {}
+    void testFaturaValorTotal() {
+        assert(this.fatura.getValorTotal() == 1000);
+    }
 
     @Test
     @DisplayName("fatura.getNomeCliente()")
-    void testFaturaNomeCliente() {}
+    void testFaturaNomeCliente() {
+        assert(this.fatura.getNomeCliente() == "Cliente");
+    }
 
     @Test
     @DisplayName("conta.getCodigoConta()")
@@ -52,7 +60,9 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("conta.getData()")
-    void testContaData() {}
+    void testContaData() {
+        assert(this.conta.getData() == (LocalDate.of(2024, 07, 24)));
+    }
 
     @Test
     @DisplayName("conta.getValorPago()")
@@ -65,9 +75,6 @@ class ProcessadorContasApplicationTests {
     @Test
     @DisplayName("pagamento.tipo.BOLETO | pagamento.tipo.CARTAO_CREDITO | pagamento.tipo.TRANSFERENCIA_BANCARIA")
     void testPagamentoTipo() {
-        Pagamento pagamentoBoleto = Pagamento.BOLETO;
-        Pagamento pagamentoCartao = Pagamento.CARTAO_CREDITO;
-        Pagamento pagamentoTransferencia = Pagamento.TRANSFERENCIA_BANCARIA;
     }
 
     @Test
