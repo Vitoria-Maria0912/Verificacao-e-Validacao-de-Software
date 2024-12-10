@@ -1,4 +1,5 @@
 package vev.processador_contas;
 
-public class Pagamento {
+public enum Pagamento {
+    BOLETO, CARTAO_CREDITO, TRANSFERENCIA_BANCARIA
 }

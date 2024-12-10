@@ -20,7 +20,6 @@ class ProcessadorContasApplicationTests {
     void setUp() {
         this.conta = new Conta();
         this.fatura = new Fatura();
-        this.pagamento = new Pagamento();
         this.processadorContas = new ProcessadorContas();
     }
 
@@ -65,7 +64,11 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("pagamento.tipo.BOLETO | pagamento.tipo.CARTAO_CREDITO | pagamento.tipo.TRANSFERENCIA_BANCARIA")
-    void testPagamentoTipo() {}
+    void testPagamentoTipo() {
+        Pagamento pagamentoBoleto = Pagamento.BOLETO;
+        Pagamento pagamentoCartao = Pagamento.CARTAO_CREDITO;
+        Pagamento pagamentoTransferencia = Pagamento.TRANSFERENCIA_BANCARIA;
+    }
 
     @Test
     @DisplayName("pagamento.getValor()")
