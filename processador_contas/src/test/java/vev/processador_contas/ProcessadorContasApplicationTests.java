@@ -1,10 +1,5 @@
 package vev.processador_contas;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,15 +7,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 @SpringBootTest
 @Transactional
 class ProcessadorContasApplicationTests {
 
+    Conta conta;
+    Fatura fatura;
+    Pagamento pagamento;
+    ProcessadorContas processadorContas;
+
     @BeforeEach
-    void setUp() {}
+    void setUp() {
+        this.conta = new Conta();
+        this.fatura = new Fatura();
+        this.pagamento = new Pagamento();
+        this.processadorContas = new ProcessadorContas();
+    }
 
     @AfterEach
     void tearDown() {}
@@ -71,7 +73,8 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("pagamento.getData()")
-    void testPagamentoData() {}
+    void testPagamentoData() {
+    }
 
     @Test
     @DisplayName("! R$ 5.000,00 < pagamento.getValor() < R$0,01")
