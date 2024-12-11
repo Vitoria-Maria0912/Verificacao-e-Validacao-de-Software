@@ -1,8 +1,9 @@
 package vev.processador_contas;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
+import jakarta.transaction.Transactional;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -20,8 +21,9 @@ class ProcessadorContasApplicationTests {
     void setUp() {
         this.contas = new ArrayList<>();
         this.conta = new Conta((LocalDate.of(2024, 07, 24)), 1000);
-        this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-        this.processadorContas = new ProcessadorContas();
+        this.contas.add(conta);
+        this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 100, "Cliente");
+        this.processadorContas = new ProcessadorContas(this.contas, this.fatura);
     }
 
     @AfterEach
@@ -31,7 +33,7 @@ class ProcessadorContasApplicationTests {
     @DisplayName("Verifica se valorSomaTotal >= valorFatura, fatura.Status == paga")
     void testVerificaSeValorSomaTotalFatura() {
         this.processadorContas.processarContas(this.fatura, this.contas);
-        assert(this.fatura.getStatus() == FaturaStatus.PAGA);
+        assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
     }
 
     @Test
@@ -44,19 +46,19 @@ class ProcessadorContasApplicationTests {
     @Test
     @DisplayName("fatura.getData()")
     void testFaturaData() {
-        assert(this.fatura.getData() == (LocalDate.of(2024, 07, 24)));
+        assertEquals((LocalDate.of(2024, 07, 24)), this.fatura.getData());
     }
 
     @Test
     @DisplayName("fatura.getValorTotal()")
     void testFaturaValorTotal() {
-        assert(this.fatura.getValorTotal() == 1000);
+        assertEquals(1000, this.fatura.getValorTotal());
     }
 
     @Test
     @DisplayName("fatura.getNomeCliente()")
     void testFaturaNomeCliente() {
-        assert(this.fatura.getNomeCliente() == "Cliente");
+        assertEquals("Cliente", this.fatura.getNomeCliente());
     }
 
     @Test
@@ -66,7 +68,7 @@ class ProcessadorContasApplicationTests {
     @Test
     @DisplayName("conta.getData()")
     void testContaData() {
-        assert(this.conta.getData() == (LocalDate.of(2024, 07, 24)));
+        assertEquals((LocalDate.of(2024, 07, 24)), this.conta.getData());
     }
 
     @Test
@@ -75,7 +77,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("processadorContas.getListaContas()")
-    void testListaContas() {}
+    void testListaContas() { this.processadorContas.getContas(); }
 
     @Test
     @DisplayName("pagamento.tipo.BOLETO | pagamento.tipo.CARTAO_CREDITO | pagamento.tipo.TRANSFERENCIA_BANCARIA")
