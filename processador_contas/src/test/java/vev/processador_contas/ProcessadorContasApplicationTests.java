@@ -26,9 +26,6 @@ class ProcessadorContasApplicationTests {
         this.processadorContas = new ProcessadorContas(this.contas, this.fatura);
     }
 
-    @AfterEach
-    void tearDown() {}
-
     @Test
     @DisplayName("Verifica se valorSomaTotal >= valorFatura, fatura.Status == paga")
     void testVerificaSeValorSomaTotalFatura() {
@@ -54,9 +51,9 @@ class ProcessadorContasApplicationTests {
     }
 
     @Test
-    @DisplayName("fatura.getValorTotal()")
-    void testFaturaValorTotal() {
-        assertEquals(1000, this.fatura.getValorTotal());
+    @DisplayName("fatura.getValorTotalFatura()")
+    void testFaturaValorTotalFatura() {
+        assertEquals(1000, this.fatura.getValorTotalFatura());
     }
 
     @Test
@@ -67,7 +64,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("conta.getCodigoConta()")
-    void testContaCodigo() {}
+    void testContaCodigo() { assertEquals(001, this.conta.getCodigoConta()); }
 
     @Test
     @DisplayName("conta.getData()")

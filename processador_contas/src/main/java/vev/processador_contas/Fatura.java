@@ -23,7 +23,7 @@ public class Fatura {
 
     public LocalDate getData() { return this.data; }
 
-    public double getValorTotal() { return this.valorTotal; }
+    public double getValorTotalFatura() { return this.valorTotal; }
 
     public String getNomeCliente() { return this.nomeCliente; }
 
