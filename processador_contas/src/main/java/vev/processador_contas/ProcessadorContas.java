@@ -1,9 +1,26 @@
 package vev.processador_contas;
 
-import java.util.List;
+import java.util.*;
+
 
 public class ProcessadorContas {
 
-    public void processarContas(Fatura fatura, List<Conta> contas) {
+    private List<Conta> contas;
+    private Fatura fatura;
+
+    public ProcessadorContas(List<Conta> contas, Fatura fatura) {
+        this.contas = contas;
+        this.fatura = fatura;
     }
+    public void processarContas(Fatura fatura, List<Conta> contas) {
+        for (Conta conta : contas) {
+            if (conta.getValorTotalConta() >= fatura.getValorTotal()) {
+                fatura.setStatus(FaturaStatus.PAGA);
+            }
+        }
+    }
+
+    public List<Conta> getContas() { return this.contas; }
+
+    public Fatura getFatura() { return this.fatura; }
 }
