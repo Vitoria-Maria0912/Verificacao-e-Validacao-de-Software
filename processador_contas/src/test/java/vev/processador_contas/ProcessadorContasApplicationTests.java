@@ -20,7 +20,7 @@ class ProcessadorContasApplicationTests {
     @BeforeEach
     void setUp() {
         this.contas = new ArrayList<>();
-        this.conta = new Conta((LocalDate.of(2024, 07, 24)), 1000);
+        this.conta = new Conta(001, (LocalDate.of(2024, 07, 24)), 1000);
         this.contas.add(conta);
         this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
         this.processadorContas = new ProcessadorContas(this.contas, this.fatura);
@@ -46,21 +46,15 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("fatura.getData()")
-    void testFaturaData() {
-        assertEquals((LocalDate.of(2024, 07, 24)), this.fatura.getData());
-    }
+    void testFaturaData() { assertEquals((LocalDate.of(2024, 07, 24)), this.fatura.getData()); }
 
     @Test
     @DisplayName("fatura.getValorTotalFatura()")
-    void testFaturaValorTotalFatura() {
-        assertEquals(1000, this.fatura.getValorTotalFatura());
-    }
+    void testFaturaValorTotalFatura() { assertEquals(1000, this.fatura.getValorTotalFatura()); }
 
     @Test
     @DisplayName("fatura.getNomeCliente()")
-    void testFaturaNomeCliente() {
-        assertEquals("Cliente", this.fatura.getNomeCliente());
-    }
+    void testFaturaNomeCliente() { assertEquals("Cliente", this.fatura.getNomeCliente()); }
 
     @Test
     @DisplayName("conta.getCodigoConta()")
@@ -68,9 +62,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("conta.getData()")
-    void testContaData() {
-        assertEquals((LocalDate.of(2024, 07, 24)), this.conta.getData());
-    }
+    void testContaData() { assertEquals((LocalDate.of(2024, 07, 24)), this.conta.getData()); }
 
     @Test
     @DisplayName("conta.getValorPago()")

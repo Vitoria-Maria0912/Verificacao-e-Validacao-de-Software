@@ -16,7 +16,7 @@ public class ProcessadorContas {
     }
     public void processarContas(Fatura fatura, List<Conta> contas) {
         for (Conta conta : contas) {
-            if (conta.getValorTotalConta() >= fatura.getValorTotal()) {
+            if (conta.getValorTotalConta() >= fatura.getValorTotalFatura()) {
                 fatura.setStatus(FaturaStatus.PAGA);
             }
         }

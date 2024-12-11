@@ -9,16 +9,20 @@ import java.time.LocalDate;
 public class Conta {
 
     private LocalDate data;
-    private double valorTotal;
+    private double valorTotalConta;
+    private int codigoConta;
 
-    Conta(LocalDate data, double valorTotal) {
+    Conta(int codigoConta, LocalDate data, double valorTotalConta) {
+        this.codigoConta = codigoConta;
         this.data = data;
-        this.valorTotal = valorTotal;
+        this.valorTotalConta = valorTotalConta;
     }
 
     public LocalDate getData() { return this.data; }
 
-    public double getValorTotalConta() { return this.valorTotal; }
+    public int getCodigoConta() { return this.codigoConta; }
 
-    public void setValorTotalConta(double valorTotal) { this.valorTotal = valorTotal; }
+    public double getValorTotalConta() { return this.valorTotalConta; }
+
+    public void setValorTotalConta(double valorTotalConta) { this.valorTotalConta = valorTotalConta; }
 }
