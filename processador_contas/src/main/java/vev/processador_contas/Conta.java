@@ -11,8 +11,10 @@ public class Conta {
     private LocalDate data;
     private double valorPagoConta;
     private int codigoConta;
+    private TipoPagamento tipoPagamento;
 
-    Conta(int codigoConta, LocalDate data, double valorTotalConta) {
+    public Conta(TipoPagamento tipoPagamento, int codigoConta, LocalDate data, double valorTotalConta) {
+        this.tipoPagamento = tipoPagamento;
         this.codigoConta = codigoConta;
         this.data = data;
         this.valorPagoConta = valorTotalConta;

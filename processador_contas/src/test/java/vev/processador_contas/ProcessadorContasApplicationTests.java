@@ -22,7 +22,7 @@ class ProcessadorContasApplicationTests {
     @BeforeEach
     void setUp() {
         this.contas = new ArrayList<>();
-        this.conta = new Conta(001, (LocalDate.of(2024, 07, 24)), 1000);
+        this.conta = new Conta(TipoPagamento.CARTAO_CREDITO, 001, (LocalDate.of(2024, 07, 24)), 1000);
         this.contas.add(conta);
         this.faturas = new ArrayList<>();
         this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
@@ -87,25 +87,29 @@ class ProcessadorContasApplicationTests {
     @Test
     @DisplayName("pagamento.getTipo()")
     void testPagamentoTipo() {
-        assertEquals(TipoPagamento.BOLETO, this.conta.getPagamento());
-        this.conta.setPagamento(TipoPagamento.CARTAO_CREDITO);
-        assertEquals(TipoPagamento.CARTAO_CREDITO, this.conta.getPagamento());
-        this.conta.setPagamento(TipoPagamento.CARTAO_CREDITO);
-        assertEquals(TipoPagamento.TRANSFERENCIA_BANCARIA, this.conta.getPagamento());
+        assertEquals(TipoPagamento.CARTAO_CREDITO, this.conta.getTipoPagamento());
+        this.conta.setTipoPagamento(TipoPagamento.CARTAO_CREDITO);
+        assertEquals(TipoPagamento.BOLETO, this.conta.getTipoPagamento());
+        this.conta.setTipoPagamento(TipoPagamento.CARTAO_CREDITO);
+        assertEquals(TipoPagamento.TRANSFERENCIA_BANCARIA, this.conta.getTipoPagamento());
     }
 
     @Test
     @DisplayName("pagamento.getValor()")
-    void testPagamentoValor() {}
+    void testPagamentoValor() { assertEquals(1000, this.pagamento.getValorPago()); }
 
     @Test
     @DisplayName("pagamento.getData()")
-    void testPagamentoData() {
-    }
+    void testPagamentoData() { assertEquals((LocalDate.of(2024, 07, 24)), this.pagamento.getData()); }
 
     @Test
     @DisplayName("! R$ 5.000,00 < pagamento.getValor() < R$0,01")
-    void testPagamentoValorMinimo() {}
+    void testPagamentoValorMinimo() {
+        assertAll(
+                assertFalse(this.pagamento.getValorPago() < 0.01),
+                assertFalse(this.pagamento.getValorPago() > 5000)
+        );
+    }
 
     @Test
     @DisplayName("Se a data de pagamento de um boleto for posterior à data da conta respectiva, então o boleto deve ser acrescido 10%")
