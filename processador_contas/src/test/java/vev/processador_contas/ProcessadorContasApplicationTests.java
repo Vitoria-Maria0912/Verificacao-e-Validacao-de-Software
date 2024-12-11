@@ -14,7 +14,9 @@ class ProcessadorContasApplicationTests {
 
     private List<Conta> contas;
     private Conta conta;
+    private List<Fatura> faturas;
     private Fatura fatura;
+    private Pagamento pagamento;
     private ProcessadorContas processadorContas;
 
     @BeforeEach
@@ -22,25 +24,28 @@ class ProcessadorContasApplicationTests {
         this.contas = new ArrayList<>();
         this.conta = new Conta(001, (LocalDate.of(2024, 07, 24)), 1000);
         this.contas.add(conta);
+        this.faturas = new ArrayList<>();
         this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
+        this.faturas.add(fatura);
+        this.pagamento = new Pagamento();
         this.processadorContas = new ProcessadorContas(this.contas, this.fatura);
     }
 
     @Test
     @DisplayName("Verifica se valorSomaTotal >= valorFatura, fatura.Status == paga")
     void testVerificaSeValorSomaTotalFatura() {
-        this.processadorContas.processarContas(this.fatura, this.contas);
+        this.processadorContas.processarContas(this.contas, this.fatura);
         assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
         this.fatura.setValorTotalFatura(700);
-        this.processadorContas.processarContas(this.fatura, this.contas);
+        this.processadorContas.processarContas(this.contas, this.fatura);
         assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
     }
 
     @Test
     @DisplayName("Verifica se valorSomaTotal < valorFatura, fatura.Status ==  pendente")
     void testVerificaSeValorSomaTotalPendente() {
-        this.conta.setValorTotalConta(700);
-        this.processadorContas.processarContas(this.fatura, this.contas);
+        this.conta.setValorPagoConta(700);
+        this.processadorContas.processarContas(this.contas, this.fatura);
         assertEquals(FaturaStatus.PENDENTE, this.fatura.getStatus());
     }
 
@@ -66,15 +71,27 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("conta.getValorPago()")
-    void testContaValorPago() {}
+    void testContaValorPago() { assertEquals(1000, this.conta.getValorPagoConta()); }
 
     @Test
     @DisplayName("processadorContas.getListaContas()")
     void testListaContas() { this.processadorContas.getContas(); }
 
     @Test
-    @DisplayName("pagamento.tipo.BOLETO | pagamento.tipo.CARTAO_CREDITO | pagamento.tipo.TRANSFERENCIA_BANCARIA")
+    @DisplayName("O processador de contas deve, para cada conta, criar um \"pagamento\" associado a essa fatura")
+    void testPagamento() {
+        this.processadorContas.criarPagamento();
+        assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
+    }
+
+    @Test
+    @DisplayName("pagamento.getTipo()")
     void testPagamentoTipo() {
+        assertEquals(TipoPagamento.BOLETO, this.conta.getPagamento());
+        this.conta.setPagamento(TipoPagamento.CARTAO_CREDITO);
+        assertEquals(TipoPagamento.CARTAO_CREDITO, this.conta.getPagamento());
+        this.conta.setPagamento(TipoPagamento.CARTAO_CREDITO);
+        assertEquals(TipoPagamento.TRANSFERENCIA_BANCARIA, this.conta.getPagamento());
     }
 
     @Test
