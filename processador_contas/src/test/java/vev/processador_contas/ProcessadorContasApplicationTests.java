@@ -27,7 +27,7 @@ class ProcessadorContasApplicationTests {
         this.faturas = new ArrayList<>();
         this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
         this.faturas.add(fatura);
-        this.pagamento = new Pagamento();
+        this.pagamento = new Pagamento((LocalDate.of(2024, 07, 24)), 1000);
         this.processadorContas = new ProcessadorContas(this.contas, this.fatura);
     }
 
@@ -106,8 +106,9 @@ class ProcessadorContasApplicationTests {
     @DisplayName("! R$ 5.000,00 < pagamento.getValor() < R$0,01")
     void testPagamentoValorMinimo() {
         assertAll(
-                assertFalse(this.pagamento.getValorPago() < 0.01),
-                assertFalse(this.pagamento.getValorPago() > 5000)
+                () -> assertFalse(this.pagamento.getValorPago() < 0.01),
+                () -> assertFalse(this.pagamento.getValorPago() > 5000),
+                () -> assertTrue(this.pagamento.verificarPagamento())
         );
     }
 

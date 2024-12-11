@@ -11,6 +11,7 @@ public class Conta {
     private LocalDate data;
     private double valorPagoConta;
     private int codigoConta;
+
     private TipoPagamento tipoPagamento;
 
     public Conta(TipoPagamento tipoPagamento, int codigoConta, LocalDate data, double valorTotalConta) {
@@ -22,9 +23,13 @@ public class Conta {
 
     public LocalDate getData() { return this.data; }
 
+    public TipoPagamento getTipoPagamento() { return this.tipoPagamento; }
+
     public int getCodigoConta() { return this.codigoConta; }
 
     public double getValorPagoConta() { return this.valorPagoConta; }
 
     public void setValorPagoConta(double valorTotalConta) { this.valorPagoConta = valorTotalConta; }
+
+    public void setTipoPagamento(TipoPagamento tipoPagamento) { this.tipoPagamento = tipoPagamento; }
 }
