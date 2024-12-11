@@ -19,4 +19,6 @@ public class Conta {
     public LocalDate getData() { return this.data; }
 
     public double getValorTotalConta() { return this.valorTotal; }
+
+    public void setValorTotalConta(double valorTotal) { this.valorTotal = valorTotal; }
 }

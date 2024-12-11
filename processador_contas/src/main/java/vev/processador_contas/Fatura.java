@@ -28,4 +28,6 @@ public class Fatura {
     public String getNomeCliente() { return this.nomeCliente; }
 
     public void setStatus(FaturaStatus faturaStatus) { this.status = faturaStatus; }
+
+    public void setValorTotalFatura(double valorTotalFatura) { this.valorTotal = valorTotalFatura; }
 }

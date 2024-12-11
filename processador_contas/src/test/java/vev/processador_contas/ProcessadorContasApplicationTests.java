@@ -34,7 +34,7 @@ class ProcessadorContasApplicationTests {
     void testVerificaSeValorSomaTotalFatura() {
         this.processadorContas.processarContas(this.fatura, this.contas);
         assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
-        this.fatura.setValorTotal(700);
+        this.fatura.setValorTotalFatura(700);
         this.processadorContas.processarContas(this.fatura, this.contas);
         assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
     }
@@ -42,6 +42,7 @@ class ProcessadorContasApplicationTests {
     @Test
     @DisplayName("Verifica se valorSomaTotal < valorFatura, fatura.Status ==  pendente")
     void testVerificaSeValorSomaTotalPendente() {
+        this.conta.setValorTotalConta(700);
         this.processadorContas.processarContas(this.fatura, this.contas);
         assertEquals(FaturaStatus.PENDENTE, this.fatura.getStatus());
     }
