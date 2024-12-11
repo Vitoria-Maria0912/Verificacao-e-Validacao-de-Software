@@ -1,8 +1,10 @@
 package vev.processador_contas;
 
+import lombok.*;
 import java.util.*;
 
-
+@Getter
+@Setter
 public class ProcessadorContas {
 
     private List<Conta> contas;

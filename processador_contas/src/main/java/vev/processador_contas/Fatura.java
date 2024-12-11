@@ -3,6 +3,8 @@ package vev.processador_contas;
 import lombok.*;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 public class Fatura {
 
     private FaturaStatus status;
@@ -24,4 +26,6 @@ public class Fatura {
     public double getValorTotal() { return this.valorTotal; }
 
     public String getNomeCliente() { return this.nomeCliente; }
+
+    public void setStatus(FaturaStatus faturaStatus) { this.status = faturaStatus; }
 }

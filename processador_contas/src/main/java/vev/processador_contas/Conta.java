@@ -1,7 +1,11 @@
 package vev.processador_contas;
 
+import lombok.*;
+
 import java.time.LocalDate;
 
+@Getter
+@Setter
 public class Conta {
 
     private LocalDate data;
@@ -14,5 +18,5 @@ public class Conta {
 
     public LocalDate getData() { return this.data; }
 
-    public double getValorTotal() { return this.valorTotal; }
+    public double getValorTotalConta() { return this.valorTotal; }
 }

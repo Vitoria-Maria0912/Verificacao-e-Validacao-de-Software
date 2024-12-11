@@ -22,7 +22,7 @@ class ProcessadorContasApplicationTests {
         this.contas = new ArrayList<>();
         this.conta = new Conta((LocalDate.of(2024, 07, 24)), 1000);
         this.contas.add(conta);
-        this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 100, "Cliente");
+        this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
         this.processadorContas = new ProcessadorContas(this.contas, this.fatura);
     }
 
@@ -34,13 +34,16 @@ class ProcessadorContasApplicationTests {
     void testVerificaSeValorSomaTotalFatura() {
         this.processadorContas.processarContas(this.fatura, this.contas);
         assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
+        this.fatura.setValorTotal(700);
+        this.processadorContas.processarContas(this.fatura, this.contas);
+        assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
     }
 
     @Test
     @DisplayName("Verifica se valorSomaTotal < valorFatura, fatura.Status ==  pendente")
     void testVerificaSeValorSomaTotalPendente() {
         this.processadorContas.processarContas(this.fatura, this.contas);
-        assert(this.fatura.getStatus() == FaturaStatus.PENDENTE);
+        assertEquals(FaturaStatus.PENDENTE, this.fatura.getStatus());
     }
 
     @Test
