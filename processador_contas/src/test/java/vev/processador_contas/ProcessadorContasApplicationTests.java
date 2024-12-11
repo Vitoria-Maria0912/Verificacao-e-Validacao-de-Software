@@ -5,17 +5,20 @@ import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.*;
 
 @SpringBootTest
 @Transactional
 class ProcessadorContasApplicationTests {
 
-    Conta conta;
-    Fatura fatura;
-    ProcessadorContas processadorContas;
+    private List<Conta> contas;
+    private Conta conta;
+    private Fatura fatura;
+    private ProcessadorContas processadorContas;
 
     @BeforeEach
     void setUp() {
+        this.contas = new ArrayList<>();
         this.conta = new Conta((LocalDate.of(2024, 07, 24)), 1000);
         this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
         this.processadorContas = new ProcessadorContas();
@@ -27,12 +30,14 @@ class ProcessadorContasApplicationTests {
     @Test
     @DisplayName("Verifica se valorSomaTotal >= valorFatura, fatura.Status == paga")
     void testVerificaSeValorSomaTotalFatura() {
+        this.processadorContas.processarContas(this.fatura, this.contas);
         assert(this.fatura.getStatus() == FaturaStatus.PAGA);
     }
 
     @Test
     @DisplayName("Verifica se valorSomaTotal < valorFatura, fatura.Status ==  pendente")
     void testVerificaSeValorSomaTotalPendente() {
+        this.processadorContas.processarContas(this.fatura, this.contas);
         assert(this.fatura.getStatus() == FaturaStatus.PENDENTE);
     }
 
