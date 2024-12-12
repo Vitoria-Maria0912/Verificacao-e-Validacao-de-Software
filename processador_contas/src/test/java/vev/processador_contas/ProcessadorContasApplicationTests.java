@@ -134,6 +134,16 @@ class ProcessadorContasApplicationTests {
     }
 
     @Test
+    void testContaNoCartaoAntesDe15Dias() {
+        this.contas = new ArrayList<>();
+        this.contas.add(new Conta(TipoPagamento.CARTAO_CREDITO, 001, LocalDate.of(2024, 06, 06), 1000.00));
+
+        this.processadorContas.processarContas(contas,fatura);
+
+        assertEquals(FaturaStatus.PAGA, fatura.getStatus());
+    }
+
+    @Test
     @DisplayName("Fatura de 1.500,00 (20/02/2023) com 3 contas no valor de 500,00, 400,00 e 600,00. " +
                 "As três contas foram pagas por boleto no dia 20/02/2023 (todas em dia), " +
                 "assim a fatura é marcada como PAGA.\n")
