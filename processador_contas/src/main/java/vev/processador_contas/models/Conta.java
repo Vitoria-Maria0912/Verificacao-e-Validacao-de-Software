@@ -1,4 +1,4 @@
-package vev.processador_contas;
+package vev.processador_contas.models;
 
 import lombok.*;
 import vev.processador_contas.enumerations.TipoPagamento;
@@ -33,4 +33,6 @@ public class Conta {
     public void setValorPagoConta(double valorTotalConta) { this.valorPagoConta = valorTotalConta; }
 
     public void setTipoPagamento(TipoPagamento tipoPagamento) { this.tipoPagamento = tipoPagamento; }
+
+    public void setData(LocalDate data) { this.data = data; }
 }

@@ -3,8 +3,9 @@ package vev.processador_contas;
 import org.junit.jupiter.api.*;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.test.context.SpringBootTest;
-import vev.processador_contas.enumerations.FaturaStatus;
-import vev.processador_contas.enumerations.TipoPagamento;
+import vev.processador_contas.enumerations.*;
+import vev.processador_contas.models.*;
+import vev.processador_contas.service.ProcessadorContas;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,9 +83,11 @@ class ProcessadorContasApplicationTests {
     void testPagamento() {
         this.processadorContas.criarPagamento(this.conta, this.fatura);
         Pagamento pagamentoEsperado = new Pagamento(this.conta.getTipoPagamento(), LocalDate.now(), this.conta.getValorPagoConta());
-//        assertAll(
-//                () -> assertEquals(pagamentoEsperado), fatura.getPagamentos().get(0))
-//        );
+        assertAll(
+                () -> assertEquals(pagamentoEsperado.getTipoPagamento(), fatura.getPagamentos().get(0).getTipoPagamento()),
+                () -> assertEquals(pagamentoEsperado.getData(), fatura.getPagamentos().get(0).getData()),
+                () -> assertEquals(pagamentoEsperado.getValorPago(), fatura.getPagamentos().get(0).getValorPago())
+        );
     }
 
     @Test
@@ -113,38 +116,45 @@ class ProcessadorContasApplicationTests {
     @Test
     @DisplayName("! R$ 5.000,00 < pagamento.getValor() < R$0,01")
     void testPagamentoValorMinimo() {
+        this.conta.setTipoPagamento(TipoPagamento.BOLETO);
+        this.processadorContas.criarPagamento(this.conta, this.fatura);
         assertAll(
-                () -> assertFalse(this.pagamento.getValorPago() < 0.01),
-                () -> assertFalse(this.pagamento.getValorPago() > 5000)
+                () -> assertTrue(this.conta.getValorPagoConta() > 0.01),
+                () -> assertTrue(this.conta.getValorPagoConta() < 5000),
+                () -> { this.conta.setValorPagoConta(0);
+                        assertFalse(this.conta.getValorPagoConta() > 0.01); },
+                () -> { this.conta.setValorPagoConta(7000);
+                        assertFalse(this.conta.getValorPagoConta() < 5000); }
         );
     }
 
     @Test
     @DisplayName("Se a data de pagamento de um boleto for posterior à data da conta respectiva, então o boleto deve ser acrescido 10%")
     void testPagamentoComJuros() {
+        double valorPagoConta = this.conta.getValorPagoConta();
+        this.conta.setTipoPagamento(TipoPagamento.BOLETO);
+        this.conta.setData(LocalDate.of(2025, 07, 24));
         this.processadorContas.criarPagamento(this.conta, this.fatura);
-        assertEquals(1000, this.pagamento.getValorPago(), 0.1);
+        assertEquals((valorPagoConta * 1.1), this.conta.getValorPagoConta());
     }
 
     @Test
     @DisplayName("Se a fatura for criada com valorTotal negativo.")
     void testContaComFaturaInvalida() {
-        this.contas = new ArrayList<>();
-        Conta conta = new Conta(TipoPagamento.BOLETO, 001, LocalDate.of(2024, 06, 06), 100.00);
-        this.contas.add(conta);
-        this.fatura = new Fatura(LocalDate.now(), -100.00, "Usuário 1");
-
-        this.processadorContas.processarContas(contas, fatura);
-
-        assertEquals(FaturaStatus.PENDENTE, fatura.getStatus());
+        List<Conta> contas1 = new ArrayList<>();
+        Conta conta1 = new Conta(TipoPagamento.BOLETO, 001, LocalDate.of(2024, 06, 06), 100.00);
+        contas1.add(conta1);
+        Fatura fatura1 = new Fatura(LocalDate.now(), -100.00, "Usuário 1");
+        this.processadorContas.processarContas(contas1, fatura1);
+        assertEquals(FaturaStatus.PENDENTE, fatura1.getStatus());
     }
 
     @Test
     @DisplayName("Se a fatura no cartão é paga antes dos 15 dias.")
     void testContaNoCartaoAntesDe15Dias() {
-        this.contas = new ArrayList<>();
-        this.contas.add(new Conta(TipoPagamento.CARTAO_CREDITO, 001, LocalDate.of(2024, 06, 06), 1000.00));
-        this.processadorContas.processarContas(contas, fatura);
+        List<Conta> contas1 = new ArrayList<>();
+        contas1.add(new Conta(TipoPagamento.CARTAO_CREDITO, 001, LocalDate.of(2024, 06, 06), 1000.00));
+        this.processadorContas.processarContas(contas1, fatura);
         assertEquals(FaturaStatus.PAGA, fatura.getStatus());
     }
 

@@ -1,4 +1,4 @@
-package vev.processador_contas;
+package vev.processador_contas.models;
 
 import lombok.*;
 import vev.processador_contas.enumerations.TipoPagamento;
@@ -19,6 +19,7 @@ public class Pagamento {
         this.tipoPagamento = tipoPagamento;
     }
 
+    public TipoPagamento getTipoPagamento() { return this.tipoPagamento; }
     public double getValorPago() { return this.valorPago; }
 
     public LocalDate getData() { return this.data; }

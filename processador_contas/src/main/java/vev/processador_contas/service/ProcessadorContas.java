@@ -1,7 +1,7 @@
-package vev.processador_contas;
+package vev.processador_contas.service;
 
-import vev.processador_contas.enumerations.FaturaStatus;
-import vev.processador_contas.enumerations.TipoPagamento;
+import vev.processador_contas.enumerations.*;
+import vev.processador_contas.models.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -28,8 +28,9 @@ public class ProcessadorContas {
     public void criarPagamento(Conta conta, Fatura fatura) {
         double valorPagoConta = conta.getValorPagoConta();
         if (conta.getTipoPagamento() == TipoPagamento.BOLETO && conta.getValorPagoConta() > 0.01 && conta.getValorPagoConta() < 5000) {
-             valorPagoConta *= (fatura.getData().isAfter(LocalDate.now())) ? 1.1 : 1;
+             valorPagoConta *= (fatura.getData().isBefore(LocalDate.now())) ? 1.1 : 1;
         }
+        conta.setValorPagoConta(valorPagoConta);
         fatura.adicionarPagamento(new Pagamento(conta.getTipoPagamento(), LocalDate.now(), valorPagoConta));
     }
 }
