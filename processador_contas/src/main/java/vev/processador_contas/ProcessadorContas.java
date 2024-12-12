@@ -1,32 +1,28 @@
 package vev.processador_contas;
 
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.*;
 
 @Getter
 @Setter
 public class ProcessadorContas {
 
-    private List<Conta> contas;
-    private Fatura fatura;
-
-    public ProcessadorContas(List<Conta> contas, Fatura fatura) {
-        this.contas = contas;
-        this.fatura = fatura;
-    }
     public void processarContas(List<Conta> contas, Fatura fatura) {
+        int somaTotalPagamentos = 0;
         for (Conta conta : contas) {
             if (conta.getValorPagoConta() >= fatura.getValorTotalFatura()) {
-                criarPagamento();
+                criarPagamento(conta, fatura);
             }
+            somaTotalPagamentos += conta.getValorPagoConta();
         }
     }
-
-    public List<Conta> getContas() { return this.contas; }
-
-    public Fatura getFatura() { return this.fatura; }
-
-    public void criarPagamento() {
+    public void criarPagamento(Conta conta, Fatura fatura) {
+        if (conta.getTipoPagamento() == TipoPagamento.BOLETO && fatura.getData().isAfter(LocalDate.now())) {
+            fatura.setValorTotalFatura(fatura.getValorTotalFatura() * 1.1);
+        }
+        new Pagamento(conta.getTipoPagamento(), LocalDate.now(), conta.getValorPagoConta());
         fatura.setStatus(FaturaStatus.PAGA);
     }
 }

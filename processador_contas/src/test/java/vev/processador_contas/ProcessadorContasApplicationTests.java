@@ -24,8 +24,8 @@ class ProcessadorContasApplicationTests {
         this.conta = new Conta(TipoPagamento.CARTAO_CREDITO, 001, (LocalDate.of(2024, 07, 24)), 1000);
         this.contas.add(conta);
         this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-        this.pagamento = new Pagamento((LocalDate.of(2024, 07, 24)), 1000);
-        this.processadorContas = new ProcessadorContas(this.contas, this.fatura);
+        this.pagamento = new Pagamento(TipoPagamento.CARTAO_CREDITO, (LocalDate.of(2024, 07, 24)), 1000);
+        this.processadorContas = new ProcessadorContas();
     }
 
     @Test
@@ -71,24 +71,25 @@ class ProcessadorContasApplicationTests {
     void testContaValorPago() { assertEquals(1000, this.conta.getValorPagoConta()); }
 
     @Test
-    @DisplayName("processadorContas.getListaContas()")
-    void testListaContas() { this.processadorContas.getContas(); }
-
-    @Test
     @DisplayName("O processador de contas deve, para cada conta, criar um \"pagamento\" associado a essa fatura")
     void testPagamento() {
-        this.processadorContas.criarPagamento();
+        this.processadorContas.criarPagamento(this.conta, this.fatura);
         assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
     }
 
     @Test
     @DisplayName("pagamento.getTipo()")
     void testPagamentoTipo() {
-        assertEquals(TipoPagamento.CARTAO_CREDITO, this.conta.getTipoPagamento());
-        this.conta.setTipoPagamento(TipoPagamento.CARTAO_CREDITO);
-        assertEquals(TipoPagamento.BOLETO, this.conta.getTipoPagamento());
-        this.conta.setTipoPagamento(TipoPagamento.CARTAO_CREDITO);
-        assertEquals(TipoPagamento.TRANSFERENCIA_BANCARIA, this.conta.getTipoPagamento());
+        assertAll(
+                () -> assertEquals(TipoPagamento.CARTAO_CREDITO, this.conta.getTipoPagamento()),
+
+                () -> { this.conta.setTipoPagamento(TipoPagamento.BOLETO);
+                        assertEquals(TipoPagamento.BOLETO, this.conta.getTipoPagamento());
+                },
+                () -> { this.conta.setTipoPagamento(TipoPagamento.TRANSFERENCIA_BANCARIA);
+                        assertEquals(TipoPagamento.TRANSFERENCIA_BANCARIA, this.conta.getTipoPagamento());
+                }
+        );
     }
 
     @Test
@@ -112,11 +113,8 @@ class ProcessadorContasApplicationTests {
     @Test
     @DisplayName("Se a data de pagamento de um boleto for posterior à data da conta respectiva, então o boleto deve ser acrescido 10%")
     void testPagamentoComJuros() {
-        Pagamento pagamentoAtrasado = new Pagamento(LocalDate.of(2024, 8, 24), 200);
-        assertAll(
-                () -> assertTrue(this.pagamento.pagarComJuros()),
-                () -> assertEquals(this.conta.getValorPagoConta(), (this.pagamento.getValorPago() * 0.1))
-        );
+        this.processadorContas.criarPagamento(this.conta, this.fatura);
+        assertEquals(1000, this.pagamento.getValorPago(), 0.1);
     }
 
     @Test

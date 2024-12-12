@@ -8,17 +8,17 @@ import java.time.LocalDate;
 @Setter
 public class Pagamento {
 
+    private TipoPagamento tipoPagamento;
     private double valorPago;
     private LocalDate data;
 
-    public Pagamento(LocalDate data, double valorPago) {
+    public Pagamento(TipoPagamento tipoPagamento, LocalDate data, double valorPago) {
         this.data = data;
         this.valorPago = valorPago;
+        this.tipoPagamento = tipoPagamento;
     }
 
-    public boolean verificarPagamento() {
-        return (0.01 < this.valorPago && this.valorPago < 5000);
-    }
+    public boolean verificarPagamento() { return (0.01 < this.valorPago && this.valorPago < 5000); }
 
     public double getValorPago() { return this.valorPago; }
 
