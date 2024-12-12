@@ -122,6 +122,18 @@ class ProcessadorContasApplicationTests {
     }
 
     @Test
+    void testContaComFaturaInvalida() {
+        this.contas = new ArrayList<>();
+        Conta conta = new Conta(TipoPagamento.BOLETO, 001, LocalDate.of(2024, 06, 06), 100.00);
+        this.contas.add(conta);
+        this.fatura = new Fatura(LocalDate.now(), -100.00, "Usuário 1");
+
+        this.processadorContas.processarContas(contas, fatura);
+
+        assertEquals(FaturaStatus.PENDENTE, fatura.getStatus());
+    }
+
+    @Test
     @DisplayName("Fatura de 1.500,00 (20/02/2023) com 3 contas no valor de 500,00, 400,00 e 600,00. " +
                 "As três contas foram pagas por boleto no dia 20/02/2023 (todas em dia), " +
                 "assim a fatura é marcada como PAGA.\n")
