@@ -1,6 +1,8 @@
 package vev.processador_contas;
 
 import lombok.*;
+import vev.processador_contas.enumerations.FaturaStatus;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -35,4 +37,6 @@ public class Fatura {
     public void setValorTotalFatura(double valorTotalFatura) { this.valorTotal = valorTotalFatura; }
 
     public void adicionarPagamento(Pagamento pagamento) { this.pagamentos.add(pagamento); }
+
+    public List<Pagamento> getPagamentos() { return this.pagamentos; }
 }

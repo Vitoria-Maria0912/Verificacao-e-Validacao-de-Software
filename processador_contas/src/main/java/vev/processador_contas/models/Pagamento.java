@@ -1,6 +1,7 @@
 package vev.processador_contas;
 
 import lombok.*;
+import vev.processador_contas.enumerations.TipoPagamento;
 
 import java.time.LocalDate;
 
@@ -17,8 +18,6 @@ public class Pagamento {
         this.valorPago = valorPago;
         this.tipoPagamento = tipoPagamento;
     }
-
-    public boolean verificarPagamento() { return (0.01 < this.valorPago && this.valorPago < 5000); }
 
     public double getValorPago() { return this.valorPago; }
 

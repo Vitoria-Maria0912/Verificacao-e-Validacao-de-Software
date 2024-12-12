@@ -1,6 +1,7 @@
 package vev.processador_contas;
 
 import lombok.*;
+import vev.processador_contas.enumerations.TipoPagamento;
 
 import java.time.LocalDate;
 
