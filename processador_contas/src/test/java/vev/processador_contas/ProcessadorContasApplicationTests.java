@@ -122,6 +122,17 @@ class ProcessadorContasApplicationTests {
                 "As três contas foram pagas por boleto no dia 20/02/2023 (todas em dia), " +
                 "assim a fatura é marcada como PAGA.\n")
     void testExemplo1(){
+        List<Conta> contas1 = new ArrayList<>();
+        Conta conta1 = new Conta(TipoPagamento.BOLETO, 002, LocalDate.of(2023, 02, 20), 500);
+        Conta conta2 = new Conta(TipoPagamento.BOLETO, 003, LocalDate.of(2023, 02, 20), 400);
+        Conta conta3 = new Conta(TipoPagamento.BOLETO, 004, LocalDate.of(2023, 02, 20), 600);
+        contas1.add(conta1);
+        contas1.add(conta2);
+        contas1.add(conta3);
+        Fatura fatura1 = new Fatura(LocalDate.of(2023, 02, 20), 1500, "Cliente Exemplo 1");
+        (new ProcessadorContas()).processarContas(contas1, fatura1);
+
+        assertEquals(FaturaStatus.PAGA, fatura1.getStatus());
     }
 
     @Test

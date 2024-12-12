@@ -1,12 +1,8 @@
 package vev.processador_contas;
 
-import lombok.*;
-
 import java.time.LocalDate;
 import java.util.*;
 
-@Getter
-@Setter
 public class ProcessadorContas {
 
     public void processarContas(List<Conta> contas, Fatura fatura) {
@@ -18,6 +14,7 @@ public class ProcessadorContas {
             somaTotalPagamentos += conta.getValorPagoConta();
         }
     }
+
     public void criarPagamento(Conta conta, Fatura fatura) {
         if (conta.getTipoPagamento() == TipoPagamento.BOLETO && fatura.getData().isAfter(LocalDate.now())) {
             fatura.setValorTotalFatura(fatura.getValorTotalFatura() * 1.1);
