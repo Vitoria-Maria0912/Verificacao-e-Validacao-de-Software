@@ -14,7 +14,6 @@ class ProcessadorContasApplicationTests {
 
     private List<Conta> contas;
     private Conta conta;
-    private List<Fatura> faturas;
     private Fatura fatura;
     private Pagamento pagamento;
     private ProcessadorContas processadorContas;
@@ -24,9 +23,7 @@ class ProcessadorContasApplicationTests {
         this.contas = new ArrayList<>();
         this.conta = new Conta(TipoPagamento.CARTAO_CREDITO, 001, (LocalDate.of(2024, 07, 24)), 1000);
         this.contas.add(conta);
-        this.faturas = new ArrayList<>();
         this.fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-        this.faturas.add(fatura);
         this.pagamento = new Pagamento((LocalDate.of(2024, 07, 24)), 1000);
         this.processadorContas = new ProcessadorContas(this.contas, this.fatura);
     }
@@ -114,7 +111,13 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("Se a data de pagamento de um boleto for posterior à data da conta respectiva, então o boleto deve ser acrescido 10%")
-    void testPagamentoComJuros() {}
+    void testPagamentoComJuros() {
+        Pagamento pagamentoAtrasado = new Pagamento(LocalDate.of(2024, 8, 24), 200);
+        assertAll(
+                () -> assertTrue(this.pagamento.pagarComJuros()),
+                () -> assertEquals(this.conta.getValorPagoConta(), (this.pagamento.getValorPago() * 0.1))
+        );
+    }
 
     @Test
     @DisplayName("Fatura de 1.500,00 (20/02/2023) com 3 contas no valor de 500,00, 400,00 e 600,00. " +
