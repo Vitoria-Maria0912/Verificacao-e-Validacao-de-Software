@@ -139,7 +139,17 @@ class ProcessadorContasApplicationTests {
     @DisplayName("Fatura de 1.500,00 (20/02/2023) com uma conta no valor 700,00 e outra conta de 800,00. " +
                 "A primeira conta foi paga por cartão de crédito (05/02/2023), " +
                 "enquanto que a segunda conta foi paga por transferência (17/02/2023). Assim, a fatura é marcada como PAGA.\n")
-    void testExemplo2(){}
+    void testExemplo2(){
+        List<Conta> contas1 = new ArrayList<>();
+        Conta conta1 = new Conta(TipoPagamento.CARTAO_CREDITO, 002, LocalDate.of(2023, 02, 05), 700);
+        Conta conta2 = new Conta(TipoPagamento.TRANSFERENCIA_BANCARIA, 003, LocalDate.of(2023, 02, 17), 800);
+        contas1.add(conta1);
+        contas1.add(conta2);
+        Fatura fatura1 = new Fatura(LocalDate.of(2023, 02, 20), 1500, "Cliente Exemplo 2");
+        (new ProcessadorContas()).processarContas(contas1, fatura1);
+
+        assertEquals(FaturaStatus.PAGA, fatura1.getStatus());
+    }
 
     @Test
     @DisplayName("Fatura de 1.500,00 (20/02/2023) com uma conta no valor 700,00 e outra conta de 800,00. " +
