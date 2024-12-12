@@ -137,9 +137,7 @@ class ProcessadorContasApplicationTests {
     void testContaNoCartaoAntesDe15Dias() {
         this.contas = new ArrayList<>();
         this.contas.add(new Conta(TipoPagamento.CARTAO_CREDITO, 001, LocalDate.of(2024, 06, 06), 1000.00));
-
         this.processadorContas.processarContas(contas,fatura);
-
         assertEquals(FaturaStatus.PAGA, fatura.getStatus());
     }
 
