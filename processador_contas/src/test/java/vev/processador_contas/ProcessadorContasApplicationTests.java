@@ -30,17 +30,21 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("Verifica se valorSomaTotal >= valorFatura, fatura.Status == paga")
-    void testVerificaSeValorSomaTotalFatura() {
-        this.processadorContas.processarContas(this.contas, this.fatura);
-        assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
-        this.fatura.setValorTotalFatura(700);
-        this.processadorContas.processarContas(this.contas, this.fatura);
-        assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
+    void testProcessarContasFaturaPaga() {
+        assertAll(
+                () -> { this.processadorContas.processarContas(this.contas, this.fatura);
+                        assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
+                },
+                () -> { this.fatura.setValorTotalFatura(700);
+                        this.processadorContas.processarContas(this.contas, this.fatura);
+                        assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
+                }
+        );
     }
 
     @Test
     @DisplayName("Verifica se valorSomaTotal < valorFatura, fatura.Status ==  pendente")
-    void testVerificaSeValorSomaTotalPendente() {
+    void testProcessarContasFaturaPendente() {
         this.conta.setValorPagoConta(700);
         this.processadorContas.processarContas(this.contas, this.fatura);
         assertEquals(FaturaStatus.PENDENTE, this.fatura.getStatus());

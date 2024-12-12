@@ -2,6 +2,7 @@ package vev.processador_contas;
 
 import lombok.*;
 import java.time.LocalDate;
+import java.util.*;
 
 @Getter
 @Setter
@@ -11,12 +12,14 @@ public class Fatura {
     private LocalDate data;
     private double valorTotal;
     private String nomeCliente;
+    private List<Pagamento> pagamentos;
 
     public Fatura(LocalDate data, double valorTotal, String nomeCliente) {
         this.data = data;
         this.status = FaturaStatus.PENDENTE;
         this.valorTotal = valorTotal;
         this.nomeCliente = nomeCliente;
+        this.pagamentos = new ArrayList<>();
     }
 
     public FaturaStatus getStatus() { return this.status; }
@@ -30,4 +33,6 @@ public class Fatura {
     public void setStatus(FaturaStatus faturaStatus) { this.status = faturaStatus; }
 
     public void setValorTotalFatura(double valorTotalFatura) { this.valorTotal = valorTotalFatura; }
+
+    public void adicionarPagamento(Pagamento pagamento) { this.pagamentos.add(pagamento); }
 }
