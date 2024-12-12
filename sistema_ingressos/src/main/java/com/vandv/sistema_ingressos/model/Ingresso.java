@@ -20,15 +20,16 @@ public class Ingresso {
     private Long id;
 
     @JsonProperty("tipo")
+    @Enumerated(EnumType.STRING)
     @Column(name = "ds_tipo", nullable = false)
-    private Enum tipo;
+    private TipoIngresso tipo;
 
     @JsonProperty("status")
+    @Enumerated(EnumType.STRING)
     @Column(name = "ds_status", nullable = false)
-    private Enum status;
+    private StatusIngresso status;
 
     @JsonProperty("preco")
     @Column(name = "ds_preco", nullable = false)
     private Double preco;
-
 }

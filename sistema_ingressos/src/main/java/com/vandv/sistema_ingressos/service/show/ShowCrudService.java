@@ -1,4 +1,4 @@
-package com.vandv.sistema_ingressos.service;
+package com.vandv.sistema_ingressos.service.show;
 
 import com.vandv.sistema_ingressos.dto.ShowPostDto;
 import com.vandv.sistema_ingressos.model.Show;

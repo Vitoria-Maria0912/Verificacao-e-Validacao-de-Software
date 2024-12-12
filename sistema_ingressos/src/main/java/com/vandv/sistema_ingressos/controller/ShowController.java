@@ -2,7 +2,8 @@ package com.vandv.sistema_ingressos.controller;
 
 import com.vandv.sistema_ingressos.dto.ShowPostDto;
 import com.vandv.sistema_ingressos.model.Show;
-import com.vandv.sistema_ingressos.service.ShowCrudService;
+import com.vandv.sistema_ingressos.service.show.ShowAdicionaLoteService;
+import com.vandv.sistema_ingressos.service.show.ShowCrudService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ import java.util.List;
 public class ShowController {
     @Autowired
     private ShowCrudService showCrudService;
+    @Autowired
+    ShowAdicionaLoteService showAdicionaLoteService;
 
     @PostMapping
     public ResponseEntity<?> createProduto(
@@ -49,4 +52,14 @@ public class ShowController {
                 .body("");
     }
 
+    @PatchMapping("/addLote/{idLote}/{idShow}")
+    public ResponseEntity<?> clienteInteressaPromocao(
+            @PathVariable Long idLote,
+            @PathVariable Long idShow
+    ) {
+        this.showAdicionaLoteService.adicionaLote(idLote, idShow);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("");
+    }
 }
