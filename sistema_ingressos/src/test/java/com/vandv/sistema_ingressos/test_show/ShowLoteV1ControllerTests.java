@@ -83,7 +83,7 @@ public class ShowLoteV1ControllerTests {
                 .build());
 
         ingresso = ingressoRepository.save(Ingresso.builder()
-                .preco(40.0)
+                .preco(10.0)
                 .tipo(TipoIngresso.NORMAL)
                 .status(StatusIngresso.DISPONIVEL)
                 .build());
@@ -96,7 +96,7 @@ public class ShowLoteV1ControllerTests {
 
         lote = Lote.builder()
                 .ingressos(new ArrayList<>())
-                .desconto(0.25)
+                .desconto(0.15)
                 .qtdIngressos(400)
                 .build();
         lote.getIngressos().add(ingresso);
@@ -104,7 +104,7 @@ public class ShowLoteV1ControllerTests {
 
         lote_one = loteRepository.save(Lote.builder()
                 .ingressos(new ArrayList<>())
-                .desconto(0.25)
+                .desconto(0.15)
                 .qtdIngressos(400)
                 .build());
 
@@ -171,7 +171,6 @@ public class ShowLoteV1ControllerTests {
 
         //Assert
         assertEquals(1, loteRepository.findById(lote_one.getId()).get().getIngressos().size());
-        assertEquals(15.0, loteRepository.findById(lote_one.getId()).get().getIngressos().get(0).getPreco());
     }
 
     @Test
@@ -226,5 +225,50 @@ public class ShowLoteV1ControllerTests {
         loteRepository.save(lote);
 
         assertEquals(TipoIngresso.MEIA_ENTRADA, loteRepository.findById(lote.getId()).get().getIngressos().get(0).getTipo());
+    }
+
+    @Test
+    @DisplayName("Quando adiciono desconto no lote de ingresso NORMAL")
+    void test_VerificaDescontoLote() throws Exception {
+        //Act
+        String responseJSONString = driver.perform(patch(URI_INGRESSO + "/addIngresso/" + ingresso.getId() + "/" +lote_one.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+
+        //Assert
+        assertEquals(8.5, loteRepository.findById(lote_one.getId()).get().getIngressos().get(0).getPreco());
+    }
+
+    @Test
+    @DisplayName("Quando adiciono desconto no lote de ingresso MEIA ENTRADA")
+    void test_VerificaDescontoLoteMeiaEntrada() throws Exception {
+        ingresso.setTipo(TipoIngresso.MEIA_ENTRADA);
+        ingressoRepository.save(ingresso);
+        //Act
+        String responseJSONString = driver.perform(patch(URI_INGRESSO + "/addIngresso/" + ingresso.getId() + "/" +lote_one.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+
+        //Assert
+        assertEquals(5, loteRepository.findById(lote_one.getId()).get().getIngressos().get(0).getPreco());
+    }
+    @Test
+    @DisplayName("Quando adiciono desconto no lote de ingresso VIP")
+    void test_VerificaDescontoLoteVIP() throws Exception {
+        ingresso.setTipo(TipoIngresso.VIP);
+        ingressoRepository.save(ingresso);
+        //Act
+        String responseJSONString = driver.perform(patch(URI_INGRESSO + "/addIngresso/" + ingresso.getId() + "/" +lote_one.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+
+        //Assert
+        assertEquals(17, loteRepository.findById(lote_one.getId()).get().getIngressos().get(0).getPreco());
     }
 }
