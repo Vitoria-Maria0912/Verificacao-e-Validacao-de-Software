@@ -20,6 +20,35 @@ public class AdicionaIngressoPadraoService implements AdicionaIngressoService{
         Lote lote = loteRepository.findById(idLote).get();
         Ingresso ingresso = ingressoRepository.findById(idIngresso).get();
 
+        // Número total de ingressos permitido para o lote
+        int qtdTotalIngressos = lote.getQtdIngressos();
+
+        // Contagem de ingressos já existentes no lote, por tipo
+        int qtdVIP = (int) lote.getIngressos().stream().filter(i -> i.getTipo().equals(TipoIngresso.VIP)).count();
+        int qtdMeiaEntrada = (int) lote.getIngressos().stream().filter(i -> i.getTipo().equals(TipoIngresso.MEIA_ENTRADA)).count();
+        int qtdNormal = (int) lote.getIngressos().stream().filter(i -> i.getTipo().equals(TipoIngresso.NORMAL)).count();
+
+        // Defina os limites para cada tipo de ingresso
+        int qtdIngressosVIPMax = (int) (qtdTotalIngressos * 0.30); // 30% do total
+        int qtdIngressosMeiaMax = (int) (qtdTotalIngressos * 0.10); // 10% do total
+        int qtdIngressosNormalMax = qtdTotalIngressos - qtdIngressosVIPMax - qtdIngressosMeiaMax; // O restante é para NORMAL
+
+        // Verifique se o ingresso é do tipo VIP e se ainda há espaço para mais ingressos VIP
+        if (ingresso.getTipo().equals(TipoIngresso.VIP) && qtdVIP >= qtdIngressosVIPMax) {
+            throw new IllegalStateException("Limite de ingressos VIP atingido.");
+        }
+
+        // Verifique se o ingresso é do tipo MEIA_ENTRADA e se ainda há espaço para mais ingressos MEIA_ENTRADA
+        if (ingresso.getTipo().equals(TipoIngresso.MEIA_ENTRADA) && qtdMeiaEntrada >= qtdIngressosMeiaMax) {
+            throw new IllegalStateException("Limite de ingressos Meia Entrada atingido.");
+        }
+
+        // Verifique se o ingresso é do tipo NORMAL e se ainda há espaço para mais ingressos NORMAL
+        if (ingresso.getTipo().equals(TipoIngresso.NORMAL) && qtdNormal >= qtdIngressosNormalMax) {
+            throw new IllegalStateException("Limite de ingressos NORMAL atingido.");
+        }
+
+        // Ajuste o preço do ingresso com base nos descontos e no tipo
         double preco = ingresso.getPreco();
         if (ingresso.getTipo().equals(TipoIngresso.NORMAL) ||
                 ingresso.getTipo().equals(TipoIngresso.VIP)) {
@@ -27,6 +56,8 @@ public class AdicionaIngressoPadraoService implements AdicionaIngressoService{
         }
         double precoCalculado = ingresso.getTipo().calcularPreco(preco);
         ingresso.setPreco(precoCalculado);
+
+        // Salve o ingresso no repositório e adicione ao lote
         ingressoRepository.save(ingresso);
         lote.getIngressos().add(ingresso);
         loteRepository.save(lote);

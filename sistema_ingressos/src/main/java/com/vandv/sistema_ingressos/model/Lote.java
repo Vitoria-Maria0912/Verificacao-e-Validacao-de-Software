@@ -17,13 +17,17 @@ import java.util.List;
 @Table(name = "tb_lote_ingresso")
 public class Lote {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_lote")
     private Long id;
 
     @JsonProperty("desconto")
     @Column(name = "ds_desconto", nullable = false)
     private Double desconto;
+
+    @JsonProperty("qtdIngressos")
+    @Column(name = "ds_quantidadeIngressos", nullable = false)
+    private Integer qtdIngressos;
 
     @JsonProperty("ingressos")
     @Column(name = "ds_ingressos", nullable = false)

@@ -85,6 +85,7 @@ public class TestRelatorioShowTests {
         lote = Lote.builder()
                 .ingressos(new ArrayList<>())
                 .desconto(0.25)
+                .qtdIngressos(400)
                 .build();
         lote.getIngressos().add(ingresso);
         loteRepository.save(lote);
@@ -171,6 +172,7 @@ public class TestRelatorioShowTests {
 
         Lote lote1 = Lote.builder()
                 .ingressos(new ArrayList<>())
+                .qtdIngressos(400)
                 .desconto(0.25)
                 .build();
         lote1.getIngressos().add(ingresso1);
@@ -211,6 +213,7 @@ public class TestRelatorioShowTests {
         Lote lote1 = Lote.builder()
                 .ingressos(new ArrayList<>())
                 .desconto(0.25)
+                .qtdIngressos(400)
                 .build();
         lote1.getIngressos().add(ingresso1);
         lote1.getIngressos().add(ingresso2);

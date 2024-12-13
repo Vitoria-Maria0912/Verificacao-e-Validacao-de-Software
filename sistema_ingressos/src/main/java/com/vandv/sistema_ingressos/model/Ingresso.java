@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_ingresso")
 public class Ingresso {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_ingresso")
     private Long id;
 

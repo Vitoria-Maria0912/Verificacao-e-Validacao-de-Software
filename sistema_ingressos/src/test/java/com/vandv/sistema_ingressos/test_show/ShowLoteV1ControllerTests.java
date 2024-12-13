@@ -97,6 +97,7 @@ public class ShowLoteV1ControllerTests {
         lote = Lote.builder()
                 .ingressos(new ArrayList<>())
                 .desconto(0.25)
+                .qtdIngressos(400)
                 .build();
         lote.getIngressos().add(ingresso);
         loteRepository.save(lote);
@@ -104,6 +105,7 @@ public class ShowLoteV1ControllerTests {
         lote_one = loteRepository.save(Lote.builder()
                 .ingressos(new ArrayList<>())
                 .desconto(0.25)
+                .qtdIngressos(400)
                 .build());
 
 

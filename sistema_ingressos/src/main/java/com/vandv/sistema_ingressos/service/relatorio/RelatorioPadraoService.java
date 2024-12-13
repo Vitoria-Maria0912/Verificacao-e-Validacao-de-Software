@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 public class RelatorioPadraoService implements RelatorioService {
     @Autowired
     ShowRepository showRepository;
-    @Override
     public RelatorioShow geraRelatorio(Long idShow) {
         Show show = showRepository.findById(idShow).orElseThrow(IdInvalidoException::new);
 
@@ -24,6 +23,7 @@ public class RelatorioPadraoService implements RelatorioService {
             for (Ingresso ingresso : lote.getIngressos()) {
                 if (ingresso.getStatus() == StatusIngresso.VENDIDO) {
                     receitaBruta += ingresso.getPreco();
+
                     switch (ingresso.getTipo()) {
                         case NORMAL:
                             ingressosNormais++;
@@ -38,7 +38,8 @@ public class RelatorioPadraoService implements RelatorioService {
                 }
             }
         }
-        // Calcular despesas de infraestrutura
+
+        // Calcular despesas de infraestrutura com acréscimo se a data for especial
         double despesasInfraestrutura = show.getTotalDespesas();
         if (show.isDataEspecial()) {
             despesasInfraestrutura += despesasInfraestrutura * 0.15;
@@ -47,7 +48,7 @@ public class RelatorioPadraoService implements RelatorioService {
         // Calcular receita líquida
         double receitaLiquida = receitaBruta - despesasInfraestrutura - show.getCache();
 
-        // Determinar status financeiro
+        // Determinar status financeiro com base na receita líquida
         StatusFinanceiro statusFinanceiro;
         if (receitaLiquida > 0) {
             statusFinanceiro = StatusFinanceiro.LUCRO;
@@ -57,7 +58,7 @@ public class RelatorioPadraoService implements RelatorioService {
             statusFinanceiro = StatusFinanceiro.PREJUIZO;
         }
 
-        // Criar o relatório
+        // Criar e preencher o relatório
         RelatorioShow relatorio = new RelatorioShow();
         relatorio.setIngressos_normal_vendidos(ingressosNormais);
         relatorio.setIngressos_vip_vendidos(ingressosVIP);
