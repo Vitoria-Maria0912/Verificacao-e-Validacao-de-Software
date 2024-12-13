@@ -7,20 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.List;
-
-@Entity
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_relatorio")
 public class RelatorioShow {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_relatorio")
-    private Long id;
 
     @JsonProperty("ingressos_normal_vendidos")
     @Column(name="ds_ingressos_normal_vendidos", nullable = false)
