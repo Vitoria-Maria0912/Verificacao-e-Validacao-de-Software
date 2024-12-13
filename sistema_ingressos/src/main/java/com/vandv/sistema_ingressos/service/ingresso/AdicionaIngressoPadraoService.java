@@ -20,48 +20,59 @@ public class AdicionaIngressoPadraoService implements AdicionaIngressoService{
         Lote lote = loteRepository.findById(idLote).get();
         Ingresso ingresso = ingressoRepository.findById(idIngresso).get();
 
-        // Número total de ingressos permitido para o lote
         int qtdTotalIngressos = lote.getQtdIngressos();
 
         // Contagem de ingressos já existentes no lote, por tipo
-        int qtdVIP = (int) lote.getIngressos().stream().filter(i -> i.getTipo().equals(TipoIngresso.VIP)).count();
-        int qtdMeiaEntrada = (int) lote.getIngressos().stream().filter(i -> i.getTipo().equals(TipoIngresso.MEIA_ENTRADA)).count();
-        int qtdNormal = (int) lote.getIngressos().stream().filter(i -> i.getTipo().equals(TipoIngresso.NORMAL)).count();
+        int qtdVIP = contarIngressosPorTipo(lote, TipoIngresso.VIP);
+        int qtdMeiaEntrada = contarIngressosPorTipo(lote, TipoIngresso.MEIA_ENTRADA);
+        int qtdNormal = contarIngressosPorTipo(lote, TipoIngresso.NORMAL);
 
         // Defina os limites para cada tipo de ingresso
-        int qtdIngressosVIPMax = (int) (qtdTotalIngressos * 0.30); // 30% do total
-        int qtdIngressosMeiaMax = (int) (qtdTotalIngressos * 0.10); // 10% do total
-        int qtdIngressosNormalMax = qtdTotalIngressos - qtdIngressosVIPMax - qtdIngressosMeiaMax; // O restante é para NORMAL
+        int qtdIngressosVIPMax = calcularLimiteIngressos(qtdTotalIngressos, 0.30);
+        int qtdIngressosMeiaMax = calcularLimiteIngressos(qtdTotalIngressos, 0.10);
+        int qtdIngressosNormalMax = calcularLimiteIngressos(qtdTotalIngressos, 1.0) - qtdIngressosVIPMax - qtdIngressosMeiaMax;
 
-        // Verifique se o ingresso é do tipo VIP e se ainda há espaço para mais ingressos VIP
-        if (ingresso.getTipo().equals(TipoIngresso.VIP) && qtdVIP >= qtdIngressosVIPMax) {
-            throw new IllegalStateException("Limite de ingressos VIP atingido.");
-        }
-
-        // Verifique se o ingresso é do tipo MEIA_ENTRADA e se ainda há espaço para mais ingressos MEIA_ENTRADA
-        if (ingresso.getTipo().equals(TipoIngresso.MEIA_ENTRADA) && qtdMeiaEntrada >= qtdIngressosMeiaMax) {
-            throw new IllegalStateException("Limite de ingressos Meia Entrada atingido.");
-        }
-
-        // Verifique se o ingresso é do tipo NORMAL e se ainda há espaço para mais ingressos NORMAL
-        if (ingresso.getTipo().equals(TipoIngresso.NORMAL) && qtdNormal >= qtdIngressosNormalMax) {
-            throw new IllegalStateException("Limite de ingressos NORMAL atingido.");
-        }
+        // Verifique os limites para cada tipo de ingresso
+        verificarLimiteIngressos(ingresso, qtdVIP, qtdIngressosVIPMax, TipoIngresso.VIP, "Limite de ingressos VIP atingido.");
+        verificarLimiteIngressos(ingresso, qtdMeiaEntrada, qtdIngressosMeiaMax, TipoIngresso.MEIA_ENTRADA, "Limite de ingressos Meia Entrada atingido.");
+        verificarLimiteIngressos(ingresso, qtdNormal, qtdIngressosNormalMax, TipoIngresso.NORMAL, "Limite de ingressos NORMAL atingido.");
 
         // Ajuste o preço do ingresso com base nos descontos e no tipo
-        double preco = ingresso.getPreco();
-        if (ingresso.getTipo().equals(TipoIngresso.NORMAL) ||
-                ingresso.getTipo().equals(TipoIngresso.VIP)) {
-            preco -= (ingresso.getPreco() * lote.getDesconto());
-        }
-        double precoCalculado = ingresso.getTipo().calcularPreco(preco);
-        ingresso.setPreco(precoCalculado);
+        double precoCalculado = calcularPrecoIngresso(ingresso, lote);
 
-        // Salve o ingresso no repositório e adicione ao lote
+        // Atualiza o ingresso com o novo preço e o salva
+        ingresso.setPreco(precoCalculado);
         ingressoRepository.save(ingresso);
+
+        // Adiciona o ingresso ao lote e salva
         lote.getIngressos().add(ingresso);
         loteRepository.save(lote);
     }
+
+    private int contarIngressosPorTipo(Lote lote, TipoIngresso tipo) {
+        return (int) lote.getIngressos().stream()
+                .filter(i -> i.getTipo().equals(tipo))
+                .count();
+    }
+
+    private int calcularLimiteIngressos(int qtdTotalIngressos, double percentual) {
+        return (int) (qtdTotalIngressos * percentual);
+    }
+
+    private void verificarLimiteIngressos(Ingresso ingresso, int qtdAtual, int qtdMax, TipoIngresso tipo, String erroMsg) {
+        if (ingresso.getTipo().equals(tipo) && qtdAtual >= qtdMax) {
+            throw new IllegalStateException(erroMsg);
+        }
+    }
+
+    private double calcularPrecoIngresso(Ingresso ingresso, Lote lote) {
+        double preco = ingresso.getPreco();
+        if (ingresso.getTipo().equals(TipoIngresso.NORMAL) || ingresso.getTipo().equals(TipoIngresso.VIP)) {
+            preco -= (ingresso.getPreco() * lote.getDesconto());
+        }
+        return ingresso.getTipo().calcularPreco(preco);
+    }
+
 
     @Override
     public void modificaDisponibilidade(Long idLote, Long idIngresso) {
