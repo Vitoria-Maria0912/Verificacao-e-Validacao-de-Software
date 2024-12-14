@@ -1,0 +1,20 @@
+-------------------------------------------------------------------------------
+Test set: com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 6.366 s <<< FAILURE! - in com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests
+testAoBuscarTodosShow  Time elapsed: 0.46 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<401>
+	at com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests.testAoBuscarTodosShow(ShowV1ControllerTests.java:151)
+
+testQuandoDeletoShow  Time elapsed: 0.035 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<204> but was:<403>
+	at com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests.testQuandoDeletoShow(ShowV1ControllerTests.java:181)
+
+testQuandoBuscoUmShow  Time elapsed: 0.04 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<401>
+	at com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests.testQuandoBuscoUmShow(ShowV1ControllerTests.java:166)
+
+testeAoCriarShow  Time elapsed: 0.094 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<201> but was:<403>
+	at com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests.testeAoCriarShow(ShowV1ControllerTests.java:113)
+

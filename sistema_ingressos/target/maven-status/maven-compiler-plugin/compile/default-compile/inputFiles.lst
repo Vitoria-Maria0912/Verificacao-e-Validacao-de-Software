@@ -1,0 +1,12 @@
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/repository/ShowRepository.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/model/Show.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/controller/ShowController.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/repository/ArtistaRepository.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/model/Artista.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/SistemaIngressosApplication.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/service/ShowCrudService.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/service/ShowCrudPadraoService.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/repository/LoteRepository.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/model/Ingresso.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/model/Lote.java
+/home/lucas/VeV/sistema_ingressos/src/main/java/com/vandv/sistema_ingressos/dto/ShowPostDto.java
