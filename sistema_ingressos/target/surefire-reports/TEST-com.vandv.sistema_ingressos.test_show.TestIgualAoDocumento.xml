@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests" time="0.009" tests="1" errors="1" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.vandv.sistema_ingressos.test_show.TestIgualAoDocumento" time="0.478" tests="1" errors="1" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -53,13 +53,13 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests" classname="com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests" time="0.009">
+  <testcase name="com.vandv.sistema_ingressos.test_show.TestIgualAoDocumento" classname="com.vandv.sistema_ingressos.test_show.TestIgualAoDocumento" time="0.475">
     <error message="Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test" type="java.lang.IllegalStateException">java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
 </error>
-    <system-out><![CDATA[20:45:12.448 [main] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Neither @ContextConfiguration nor @ContextHierarchy found for test class [ShowV1ControllerTests]: using SpringBootContextLoader
-20:45:12.449 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader -- Could not detect default resource locations for test class [com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests]: no resource found for suffixes {-context.xml, Context.groovy}.
-20:45:12.450 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests]: ShowV1ControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-20:45:12.458 [main] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using ContextCustomizers for test class [ShowV1ControllerTests]: [ImportsContextCustomizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, TestRestTemplateContextCustomizer, DisableObservabilityContextCustomizer, PropertyMappingContextCustomizer, Customizer]
+    <system-out><![CDATA[20:45:12.217 [main] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Neither @ContextConfiguration nor @ContextHierarchy found for test class [TestIgualAoDocumento]: using SpringBootContextLoader
+20:45:12.222 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader -- Could not detect default resource locations for test class [com.vandv.sistema_ingressos.test_show.TestIgualAoDocumento]: no resource found for suffixes {-context.xml, Context.groovy}.
+20:45:12.222 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.vandv.sistema_ingressos.test_show.TestIgualAoDocumento]: TestIgualAoDocumento does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+20:45:12.282 [main] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using ContextCustomizers for test class [TestIgualAoDocumento]: [ImportsContextCustomizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, TestRestTemplateContextCustomizer, DisableObservabilityContextCustomizer, PropertyMappingContextCustomizer, Customizer]
 ]]></system-out>
   </testcase>
 </testsuite>

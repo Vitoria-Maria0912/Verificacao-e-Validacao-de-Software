@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
-Test set: com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests
+Test set: com.vandv.sistema_ingressos.test_show.TestRelatorioShowTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.009 s <<< FAILURE! - in com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests
-com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests  Time elapsed: 0.009 s  <<< ERROR!
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.031 s <<< FAILURE! - in com.vandv.sistema_ingressos.test_show.TestRelatorioShowTests
+com.vandv.sistema_ingressos.test_show.TestRelatorioShowTests  Time elapsed: 0.031 s  <<< ERROR!
 java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
 

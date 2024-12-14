@@ -1,2 +1,4 @@
 /home/lucas/VeV/sistema_ingressos/src/test/java/com/vandv/sistema_ingressos/test_show/ShowV1ControllerTests.java
-/home/lucas/VeV/sistema_ingressos/src/test/java/com/vandv/sistema_ingressos/SistemaIngressosApplicationTests.java
+/home/lucas/VeV/sistema_ingressos/src/test/java/com/vandv/sistema_ingressos/test_show/ShowLoteV1ControllerTests.java
+/home/lucas/VeV/sistema_ingressos/src/test/java/com/vandv/sistema_ingressos/test_show/TestIgualAoDocumento.java
+/home/lucas/VeV/sistema_ingressos/src/test/java/com/vandv/sistema_ingressos/test_show/TestRelatorioShowTests.java

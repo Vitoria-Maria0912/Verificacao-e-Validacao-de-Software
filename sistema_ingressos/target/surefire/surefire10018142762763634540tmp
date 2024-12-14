@@ -1,5 +1,5 @@
 #surefire
-#Tue Dec 10 22:38:35 BRT 2024
+#Sat Dec 14 20:45:10 BRT 2024
 childDelegation=false
 classPathUrl.0=/home/lucas/VeV/sistema_ingressos/target/test-classes
 classPathUrl.1=/home/lucas/VeV/sistema_ingressos/target/classes
@@ -131,7 +131,7 @@ mainCliOptions2=LOGGING_LEVEL_INFO
 mainCliOptions3=LOGGING_LEVEL_DEBUG
 mainCliOptions4=SHOW_ERRORS
 mainCliOptions5=REACTOR_FAIL_FAST
-pluginPid=26071
+pluginPid=59674
 preferTestsFromInStream=false
 providerConfiguration=org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
 reportsDirectory=/home/lucas/VeV/sistema_ingressos/target/surefire-reports
@@ -145,8 +145,10 @@ surefireClassPathUrl.1=/home/lucas/.m2/repository/org/junit/platform/junit-platf
 surefireClassPathUrl.2=/home/lucas/.m2/repository/org/apache/maven/surefire/surefire-api/2.22.2/surefire-api-2.22.2.jar
 surefireClassPathUrl.3=/home/lucas/.m2/repository/org/apache/maven/surefire/surefire-logger-api/2.22.2/surefire-logger-api-2.22.2.jar
 systemExitTimeout=30
-tc.0=com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests
-tc.1=com.vandv.sistema_ingressos.SistemaIngressosApplicationTests
+tc.0=com.vandv.sistema_ingressos.test_show.TestIgualAoDocumento
+tc.1=com.vandv.sistema_ingressos.test_show.ShowV1ControllerTests
+tc.2=com.vandv.sistema_ingressos.test_show.TestRelatorioShowTests
+tc.3=com.vandv.sistema_ingressos.test_show.ShowLoteV1ControllerTests
 testClassesDirectory=/home/lucas/VeV/sistema_ingressos/target/test-classes
 testSuiteDefinitionTestSourceDirectory=/home/lucas/VeV/sistema_ingressos/src/test/java
 useManifestOnlyJar=true

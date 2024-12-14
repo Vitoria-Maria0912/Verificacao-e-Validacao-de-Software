@@ -1,0 +1,7 @@
+-------------------------------------------------------------------------------
+Test set: com.vandv.sistema_ingressos.test_show.ShowLoteV1ControllerTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.039 s <<< FAILURE! - in com.vandv.sistema_ingressos.test_show.ShowLoteV1ControllerTests
+com.vandv.sistema_ingressos.test_show.ShowLoteV1ControllerTests  Time elapsed: 0.039 s  <<< ERROR!
+java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
+
