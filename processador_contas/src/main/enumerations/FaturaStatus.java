@@ -1,4 +1,4 @@
-package vev.processador_contas.enumerations;
+package main.enumerations;
 
 public enum FaturaStatus {
     PENDENTE, PAGA

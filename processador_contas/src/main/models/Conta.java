@@ -1,12 +1,9 @@
-package vev.processador_contas.models;
-
-import lombok.*;
-import vev.processador_contas.enumerations.TipoPagamento;
+package main.models;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+import main.enumerations.TipoPagamento;
+
 public class Conta {
 
     private LocalDate data;

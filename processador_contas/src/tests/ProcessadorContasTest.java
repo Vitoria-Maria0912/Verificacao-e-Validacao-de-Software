@@ -1,20 +1,17 @@
-package vev.processador_contas;
+package tests;
 
-import org.junit.jupiter.api.*;
-import jakarta.transaction.Transactional;
-import org.springframework.boot.test.context.SpringBootTest;
-import vev.processador_contas.enumerations.*;
-import vev.processador_contas.models.*;
-import vev.processador_contas.service.ProcessadorContas;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-class ProcessadorContasApplicationTests {
+import main.models.*;
+import main.enumerations.*;
+import main.service.ProcessadorContas;
+
+public class ProcessadorContasTest {
 
     private List<Conta> contas;
     private Conta conta;
@@ -23,7 +20,7 @@ class ProcessadorContasApplicationTests {
     private ProcessadorContas processadorContas;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         this.contas = new ArrayList<>();
         this.conta = new Conta(TipoPagamento.CARTAO_CREDITO, 001, (LocalDate.of(2024, 07, 24)), 1000);
         this.contas.add(conta);
@@ -34,7 +31,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("Verifica se valorSomaTotal >= valorFatura, fatura.Status == paga")
-    void testProcessarContasFaturaPaga() {
+    public void testProcessarContasFaturaPaga() {
         assertAll(
                 () -> { this.processadorContas.processarContas(this.contas, this.fatura);
                         assertEquals(FaturaStatus.PAGA, this.fatura.getStatus());
@@ -48,7 +45,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("Verifica se valorSomaTotal < valorFatura, fatura.Status ==  pendente")
-    void testProcessarContasFaturaPendente() {
+    public void testProcessarContasFaturaPendente() {
         this.conta.setValorPagoConta(700);
         this.processadorContas.processarContas(this.contas, this.fatura);
         assertEquals(FaturaStatus.PENDENTE, this.fatura.getStatus());
@@ -56,31 +53,31 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("fatura.getData()")
-    void testFaturaData() { assertEquals((LocalDate.of(2024, 07, 24)), this.fatura.getData()); }
+    public void testFaturaData() { assertEquals((LocalDate.of(2024, 07, 24)), this.fatura.getData()); }
 
     @Test
     @DisplayName("fatura.getValorTotalFatura()")
-    void testFaturaValorTotalFatura() { assertEquals(1000, this.fatura.getValorTotalFatura()); }
+    public void testFaturaValorTotalFatura() { assertEquals(1000, this.fatura.getValorTotalFatura()); }
 
     @Test
     @DisplayName("fatura.getNomeCliente()")
-    void testFaturaNomeCliente() { assertEquals("Cliente", this.fatura.getNomeCliente()); }
+    public void testFaturaNomeCliente() { assertEquals("Cliente", this.fatura.getNomeCliente()); }
 
     @Test
     @DisplayName("conta.getCodigoConta()")
-    void testContaCodigo() { assertEquals(001, this.conta.getCodigoConta()); }
+    public void testContaCodigo() { assertEquals(001, this.conta.getCodigoConta()); }
 
     @Test
     @DisplayName("conta.getData()")
-    void testContaData() { assertEquals((LocalDate.of(2024, 07, 24)), this.conta.getData()); }
+    public void testContaData() { assertEquals((LocalDate.of(2024, 07, 24)), this.conta.getData()); }
 
     @Test
     @DisplayName("conta.getValorPago()")
-    void testContaValorPago() { assertEquals(1000, this.conta.getValorPagoConta()); }
+    public void testContaValorPago() { assertEquals(1000, this.conta.getValorPagoConta()); }
 
     @Test
     @DisplayName("O processador de contas deve, para cada conta, criar um \"pagamento\" associado a essa fatura")
-    void testPagamento() {
+    public void testPagamento() {
         this.processadorContas.criarPagamento(this.conta, this.fatura);
         Pagamento pagamentoEsperado = new Pagamento(this.conta.getTipoPagamento(), LocalDate.now(), this.conta.getValorPagoConta());
         assertAll(
@@ -92,7 +89,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("pagamento.getTipo()")
-    void testPagamentoTipo() {
+    public void testPagamentoTipo() {
         assertAll(
                 () -> assertEquals(TipoPagamento.CARTAO_CREDITO, this.conta.getTipoPagamento()),
 
@@ -107,15 +104,15 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("pagamento.getValor()")
-    void testPagamentoValor() { assertEquals(1000, this.pagamento.getValorPago()); }
+    public void testPagamentoValor() { assertEquals(1000, this.pagamento.getValorPago()); }
 
     @Test
     @DisplayName("pagamento.getData()")
-    void testPagamentoData() { assertEquals((LocalDate.of(2024, 07, 24)), this.pagamento.getData()); }
+    public void testPagamentoData() { assertEquals((LocalDate.of(2024, 07, 24)), this.pagamento.getData()); }
 
     @Test
     @DisplayName("! R$ 5.000,00 < pagamento.getValor() < R$0,01")
-    void testPagamentoValorMinimo() {
+    public void testPagamentoValorMinimo() {
         this.conta.setTipoPagamento(TipoPagamento.BOLETO);
         this.processadorContas.criarPagamento(this.conta, this.fatura);
         assertAll(
@@ -130,7 +127,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("Se a data de pagamento de um boleto for posterior à data da conta respectiva, então o boleto deve ser acrescido 10%")
-    void testPagamentoComJuros() {
+    public void testPagamentoComJuros() {
         double valorPagoConta = this.conta.getValorPagoConta();
         this.conta.setTipoPagamento(TipoPagamento.BOLETO);
         this.conta.setData(LocalDate.of(2025, 07, 24));
@@ -140,7 +137,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("Se a fatura for criada com valorTotal negativo.")
-    void testContaComFaturaInvalida() {
+    public void testContaComFaturaInvalida() {
         List<Conta> contas1 = new ArrayList<>();
         Conta conta1 = new Conta(TipoPagamento.BOLETO, 001, LocalDate.of(2024, 06, 06), 100.00);
         contas1.add(conta1);
@@ -151,7 +148,7 @@ class ProcessadorContasApplicationTests {
 
     @Test
     @DisplayName("Se a fatura no cartão é paga antes dos 15 dias.")
-    void testContaNoCartaoAntesDe15Dias() {
+    public void testContaNoCartaoAntesDe15Dias() {
         List<Conta> contas1 = new ArrayList<>();
         contas1.add(new Conta(TipoPagamento.CARTAO_CREDITO, 001, LocalDate.of(2024, 06, 06), 1000.00));
         this.processadorContas.processarContas(contas1, fatura);
@@ -162,7 +159,7 @@ class ProcessadorContasApplicationTests {
     @DisplayName("Fatura de 1.500,00 (20/02/2023) com 3 contas no valor de 500,00, 400,00 e 600,00. " +
                 "As três contas foram pagas por boleto no dia 20/02/2023 (todas em dia), " +
                 "assim a fatura é marcada como PAGA.\n")
-    void testExemplo1(){
+    public void testExemplo1(){
         List<Conta> contas1 = new ArrayList<>();
         Conta conta1 = new Conta(TipoPagamento.BOLETO, 002, LocalDate.of(2023, 02, 20), 500);
         Conta conta2 = new Conta(TipoPagamento.BOLETO, 003, LocalDate.of(2023, 02, 20), 400);
@@ -180,7 +177,7 @@ class ProcessadorContasApplicationTests {
     @DisplayName("Fatura de 1.500,00 (20/02/2023) com uma conta no valor 700,00 e outra conta de 800,00. " +
                 "A primeira conta foi paga por cartão de crédito (05/02/2023), " +
                 "enquanto que a segunda conta foi paga por transferência (17/02/2023). Assim, a fatura é marcada como PAGA.\n")
-    void testExemplo2(){
+    public void testExemplo2(){
         List<Conta> contas1 = new ArrayList<>();
         Conta conta1 = new Conta(TipoPagamento.CARTAO_CREDITO, 002, LocalDate.of(2023, 02, 05), 700);
         Conta conta2 = new Conta(TipoPagamento.TRANSFERENCIA_BANCARIA, 003, LocalDate.of(2023, 02, 17), 800);
@@ -196,7 +193,7 @@ class ProcessadorContasApplicationTests {
     @DisplayName("Fatura de 1.500,00 (20/02/2023) com uma conta no valor 700,00 e outra conta de 800,00. " +
                 "A primeira conta foi paga por cartão de crédito (06/02/2023), " +
                 "enquanto que a segunda conta foi paga por transferência (17/02/2023). Assim, a fatura é marcada como PENDENTE.\n")
-    void testExemplo3(){
+    public void testExemplo3(){
         List<Conta> contas1 = new ArrayList<>();
         Conta conta1 = new Conta(TipoPagamento.CARTAO_CREDITO, 002, LocalDate.of(2023, 02, 06), 700.0);
         Conta conta2 = new Conta(TipoPagamento.TRANSFERENCIA_BANCARIA, 003, LocalDate.of(2023, 02, 17), 800.0);

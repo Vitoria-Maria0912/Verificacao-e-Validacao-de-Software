@@ -1,12 +1,8 @@
-package vev.processador_contas.models;
-
-import lombok.*;
-import vev.processador_contas.enumerations.TipoPagamento;
+package main.models;
 
 import java.time.LocalDate;
+import main.enumerations.TipoPagamento;
 
-@Getter
-@Setter
 public class Pagamento {
 
     private TipoPagamento tipoPagamento;

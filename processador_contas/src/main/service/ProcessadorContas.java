@@ -1,11 +1,11 @@
-package vev.processador_contas.service;
+package main.service;
 
-import vev.processador_contas.enumerations.*;
-import vev.processador_contas.models.*;
-
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.List;
+
+import main.enumerations.*;
+import main.models.*;
 
 public class ProcessadorContas {
 

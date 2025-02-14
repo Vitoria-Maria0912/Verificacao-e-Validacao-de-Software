@@ -1,13 +1,10 @@
-package vev.processador_contas.models;
-
-import lombok.*;
-import vev.processador_contas.enumerations.FaturaStatus;
+package main.models;
 
 import java.time.LocalDate;
 import java.util.*;
 
-@Getter
-@Setter
+import main.enumerations.FaturaStatus;
+
 public class Fatura {
 
     private FaturaStatus status;
