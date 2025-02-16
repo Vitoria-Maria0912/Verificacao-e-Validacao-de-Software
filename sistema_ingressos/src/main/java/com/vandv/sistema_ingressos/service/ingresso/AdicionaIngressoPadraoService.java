@@ -36,7 +36,6 @@ public class AdicionaIngressoPadraoService implements AdicionaIngressoService{
         verificarLimiteIngressos(ingresso, qtdVIP, qtdIngressosVIPMax, TipoIngresso.VIP, "Limite de ingressos VIP atingido.");
         verificarLimiteIngressos(ingresso, qtdMeiaEntrada, qtdIngressosMeiaMax, TipoIngresso.MEIA_ENTRADA, "Limite de ingressos Meia Entrada atingido.");
         verificarLimiteIngressos(ingresso, qtdNormal, qtdIngressosNormalMax, TipoIngresso.NORMAL, "Limite de ingressos NORMAL atingido.");
-
         // Ajuste o preço do ingresso com base nos descontos e no tipo
         double precoCalculado = calcularPrecoIngresso(ingresso, lote);
 
@@ -70,7 +69,7 @@ public class AdicionaIngressoPadraoService implements AdicionaIngressoService{
         if (ingresso.getTipo().equals(TipoIngresso.NORMAL) || ingresso.getTipo().equals(TipoIngresso.VIP)) {
             preco -= (ingresso.getPreco() * lote.getDesconto());
         }
-        return ingresso.getTipo().calcularPreco(preco);
+        return preco;
     }
 
 
