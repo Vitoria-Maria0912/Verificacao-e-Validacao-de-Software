@@ -41,87 +41,73 @@ public class ProcessadorContasTest {
     class AVLTest {
 
         @Test
-        @DisplayName("TC01 - Testa acima do limite superior do valor boleto pago, mostrando uma mensagem de erro caso contrário.")
+        @DisplayName("TC01 - Testa acima do limite superior do valor boleto pago, mantendo a fatura como pendente.")
         public void testAcimaLimiteSuperior() { 
             Conta conta = new Conta(TipoPagamento.BOLETO, 001, (LocalDate.of(2024, 07, 24)), 5001);
             contas.add(conta);
             Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-            processadorContas.criarPagamento(conta, fatura);
-
-            String saida = outputStream.toString().trim();
-            assertEquals("Boleto com valor superior a R$ 5000 não pode ser pago!", saida);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PENDENTE, fatura.getStatus());
         }
 
         @Test
-        @DisplayName("TC02 - Testa se os limites superior e inferior do valor boleto são respeitados.")
+        @DisplayName("TC02 - Testa se no limite superior do valor boleto é respeitado.")
         public void testLimiteSuperior() { 
             Conta conta = new Conta(TipoPagamento.BOLETO, 001, (LocalDate.of(2024, 07, 24)), 5000);
             contas.add(conta);
             Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-            processadorContas.criarPagamento(conta, fatura);
-
-            String saida = outputStream.toString().trim();
-            assertEquals("Boleto pago com sucesso!", saida);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PAGA, fatura.getStatus());
         }
 
         @Test
-        @DisplayName("TC03 - Testa se os limites superior e inferior do valor boleto são respeitados.")
+        @DisplayName("TC03 - Testa próximo ao limite superior do valor boleto.")
         public void testProximoLimiteSuperior() { 
             Conta conta = new Conta(TipoPagamento.BOLETO, 001, (LocalDate.of(2024, 07, 24)), 4999);
             contas.add(conta);
             Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-            processadorContas.criarPagamento(conta, fatura);
-
-            String saida = outputStream.toString().trim();
-            assertEquals("Boleto pago com sucesso!", saida);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PAGA, fatura.getStatus());
         }
 
         @Test
-        @DisplayName("TC04 - Testa se os limites superior e inferior do valor boleto são respeitados.")
+        @DisplayName("TC04 - Testa, com um valor qualquer, se os limites superior e inferior do valor boleto são respeitados.")
         public void testValorQualquer() { 
             Conta conta = new Conta(TipoPagamento.BOLETO, 001, (LocalDate.of(2024, 07, 24)), 100);
             contas.add(conta);
             Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-            processadorContas.criarPagamento(conta, fatura);
-
-            String saida = outputStream.toString().trim();
-            assertEquals("Boleto pago com sucesso!", saida);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PAGA, fatura.getStatus());
         }
 
         @Test
-        @DisplayName("TC05 - Testa se os limites superior e inferior do valor boleto são respeitados.")
+        @DisplayName("TC05 - Testa próximo ao limite inferior do valor boleto.")
         public void testProximoLimiteInferior() { 
             Conta conta = new Conta(TipoPagamento.BOLETO, 001, (LocalDate.of(2024, 07, 24)), 0.02);
             contas.add(conta);
-            Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-            processadorContas.criarPagamento(conta, fatura);
-
-            String saida = outputStream.toString().trim();
-            assertEquals("Boleto pago com sucesso!", saida);
+            Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 0.1, "Cliente");
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PAGA, fatura.getStatus());
         }
 
         @Test
-        @DisplayName("TC06 - Testa se os limites superior e inferior do valor boleto são respeitados.")
+        @DisplayName("TC06 - Testa se no limite inferior do valor boleto é respeitado.")
         public void testLimiteInferior() { 
             Conta conta = new Conta(TipoPagamento.BOLETO, 001, (LocalDate.of(2024, 07, 24)), 0.01);
             contas.add(conta);
             Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-            processadorContas.criarPagamento(conta, fatura);
-
-            String saida = outputStream.toString().trim();
-            assertEquals("Boleto pago com sucesso!", saida);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PENDENTE, fatura.getStatus());
         }
 
         @Test
-        @DisplayName("TC07 - Testa abaixo do limite inferior do valor boleto pago, mostrando uma mensagem de erro caso contrário.")
+        @DisplayName("TC07 - Testa abaixo do limite inferior do valor boleto pago, mantendo a fatura como pendente.")
         public void testAbaixoLimiteInferior() { 
             Conta conta = new Conta(TipoPagamento.BOLETO, 001, (LocalDate.of(2024, 07, 24)), 0);
             contas.add(conta);
             Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
-            processadorContas.criarPagamento(conta, fatura);
-
-            String saida = outputStream.toString().trim();
-            assertEquals("Boleto com valor inferior a R$ 0,01 não pode ser pago!", saida);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PENDENTE, fatura.getStatus());
         }
     }
 
@@ -130,8 +116,34 @@ public class ProcessadorContasTest {
     class ParticaoTest {
 
         @Test
-        @DisplayName("")
-        public void test() { assertEquals(1,1); }
+        @DisplayName("TC08 - Muda o status da fatura para 'Paga' se a variável 'Valor total soma contas' for igual a 'Valor da fatura'.")
+        public void testFaturaPagaValoresIguais() { 
+            Conta conta = new Conta(TipoPagamento.CARTAO_CREDITO, 001, (LocalDate.of(2024, 07, 24)), 1000);
+            Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
+            contas.add(conta);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PAGA, fatura.getStatus());
+        }
+
+        @Test
+        @DisplayName("TC09 - Muda o status da fatura para 'Paga' se a variável 'Valor total soma contas' for maior que a 'Valor da fatura'.")
+        public void testFaturaPagaFaturaMenor() { 
+            Conta conta = new Conta(TipoPagamento.CARTAO_CREDITO, 001, (LocalDate.of(2024, 07, 24)), 1000);
+            Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 800, "Cliente");
+            contas.add(conta);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PAGA, fatura.getStatus());
+        }
+
+        @Test
+        @DisplayName("TC10 - Mantém o status da fatura como 'Pendente' se a variável 'Valor total soma contas' for menor que a 'Valor da fatura'.")
+        public void testFaturaPagaFaturaMaior() { 
+            Conta conta = new Conta(TipoPagamento.CARTAO_CREDITO, 001, (LocalDate.of(2024, 07, 24)), 800);
+            Fatura fatura = new Fatura((LocalDate.of(2024, 07, 24)), 1000, "Cliente");
+            contas.add(conta);
+            processadorContas.processarContas(contas, fatura);
+            assertEquals(FaturaStatus.PENDENTE, fatura.getStatus());
+        }
     }
 
     @Nested
