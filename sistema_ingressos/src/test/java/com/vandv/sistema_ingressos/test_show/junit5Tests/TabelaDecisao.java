@@ -83,6 +83,50 @@ public class TabelaDecisao {
         ingressoRepository.deleteAll();
     }
 
+    @ParameterizedTest
+    @CsvSource({"0.2,VIP,200.0,160.0", "0.2,MEIA_ENTRADA,200.0,200.0", "0.0,VIP,200.0,200.0", "0.0,MEIA_ENTRADA,200.0,200.0", "0.0,NORMAL,200.0,200.0", "0.5,NORMAL,200.0,100.0"})
+    @DisplayName("Teste parametrizado para regras de decisão")
+    void testarRegrasDeDecisao(double desconto, TipoIngresso tipo, double precoOriginal, double precoEsperado) throws Exception {
+        executarTeste(desconto, tipo, precoOriginal, precoEsperado);
+    }
+
+    private void executarTeste(double desconto, TipoIngresso tipo, double precoOriginal, double precoEsperado) throws Exception {
+        Artista artista = artistaRepository.save(Artista.builder()
+                .nome("Lucas")
+                .sobrenome("Pereira")
+                .nomeArtistico("Banda LuFi")
+                .genero("sertanejo")
+                .cpf("870.756.333-90")
+                .build());
+
+        Show show = showRepository.save(Show.builder()
+                .dataShow(new Date())
+                .artista(artista)
+                .cache(5000)
+                .totalDespesas(10000)
+                .lote(new ArrayList<>())
+                .dataEspecial(false)
+                .build());
+
+        Lote loteX = loteRepository.save(Lote.builder()
+                .ingressos(new ArrayList<>())
+                .desconto(desconto)
+                .qtdIngressos(100)
+                .build());
+
+        Ingresso ingressoX = ingressoRepository.save(Ingresso.builder()
+                .preco(precoOriginal)
+                .tipo(tipo)
+                .status(StatusIngresso.DISPONIVEL)
+                .build());
+
+        driver.perform(MockMvcRequestBuilders.patch(URI_INGRESSO + "/addIngresso/" + loteX.getId() + "/" + ingressoX.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        assertEquals(precoEsperado, loteRepository.findById(loteX.getId()).get().getIngressos().get(0).getPreco());
+    }
+
     @Test
     @DirtiesContext
     @Order(1)
@@ -435,49 +479,5 @@ public class TabelaDecisao {
 
         //Assert
         assertEquals(StatusFinanceiro.PREJUIZO, relatorioShow1.getStatus_financeiro());
-    }
-
-    @ParameterizedTest
-    @CsvSource({"0.2,VIP,200.0,160.0", "0.2,MEIA_ENTRADA,200.0,200.0", "0.0,VIP,200.0,200.0", "0.0,MEIA_ENTRADA,200.0,200.0", "0.0,NORMAL,200.0,200.0", "0.5,NORMAL,200.0,100.0"})
-    @DisplayName("Teste parametrizado para regras de decisão")
-    void testarRegrasDeDecisao(double desconto, TipoIngresso tipo, double precoOriginal, double precoEsperado) throws Exception {
-        executarTeste(desconto, tipo, precoOriginal, precoEsperado);
-    }
-
-    private void executarTeste(double desconto, TipoIngresso tipo, double precoOriginal, double precoEsperado) throws Exception {
-        Artista artista = artistaRepository.save(Artista.builder()
-                .nome("Lucas")
-                .sobrenome("Pereira")
-                .nomeArtistico("Banda LuFi")
-                .genero("sertanejo")
-                .cpf("870.756.333-90")
-                .build());
-
-        Show show = showRepository.save(Show.builder()
-                .dataShow(new Date())
-                .artista(artista)
-                .cache(5000)
-                .totalDespesas(10000)
-                .lote(new ArrayList<>())
-                .dataEspecial(false)
-                .build());
-
-        Lote loteX = loteRepository.save(Lote.builder()
-                .ingressos(new ArrayList<>())
-                .desconto(desconto)
-                .qtdIngressos(100)
-                .build());
-
-        Ingresso ingressoX = ingressoRepository.save(Ingresso.builder()
-                .preco(precoOriginal)
-                .tipo(tipo)
-                .status(StatusIngresso.DISPONIVEL)
-                .build());
-
-        driver.perform(MockMvcRequestBuilders.patch(URI_INGRESSO + "/addIngresso/" + loteX.getId() + "/" + ingressoX.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        assertEquals(precoEsperado, loteRepository.findById(loteX.getId()).get().getIngressos().get(0).getPreco());
     }
 }

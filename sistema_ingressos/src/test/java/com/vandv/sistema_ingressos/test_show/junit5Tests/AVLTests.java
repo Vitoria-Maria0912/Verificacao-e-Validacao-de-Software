@@ -88,6 +88,84 @@ public class AVLTests {
         loteRepository.deleteAll();
         ingressoRepository.deleteAll();
     }
+    @Nested
+    @DisplayName("Testes de Quantidade de Ingressos")
+    class TesteQuantidadeIngressos {
+        @ParameterizedTest
+        @CsvSource({"20,10,70", "21,10,69", "25,10,65", "29,10,61"})
+        @DisplayName("Teste parametrizado de diferentes quantidades de ingressos")
+        @Order(1)
+        void testarDiferentesQuantidadesDeIngressos(int qtdVIP, int qtdMeia, int qtdNormal) throws Exception {
+            criarShowComIngressos(qtdVIP, qtdMeia, qtdNormal);
+        }
+    }
+
+    @DisplayName("Teste repetido para robustez")
+    @RepeatedTest(3)
+    @Timeout(5)
+    void testeRepetidoParaRobustez() throws Exception {
+        criarShowComIngressos(20, 10, 70);
+    }
+
+    private void criarShowComIngressos(int qtdVIP, int qtdMeia, int qtdNormal) throws Exception {
+        // Dados para os testes
+        Artista artista = artistaRepository.save(Artista.builder()
+                .id(1L)
+                .nome("Lucas")
+                .sobrenome("Pereira")
+                .nomeArtistico("Banda LuFi")
+                .genero("sertanejo")
+                .cpf("870.756.333-90")
+                .build());
+
+        ShowPostDto showPostDto = ShowPostDto.builder()
+                .dataShow(new Date("12/03/2023"))
+                .artista(artista)
+                .cache(100000)
+                .totalDespesas(30000)
+                .lote(new ArrayList<>())
+                .dataEspecial(true)
+                .build();
+
+        Lote loteX = loteRepository.save(Lote.builder()
+                .ingressos(new ArrayList<>())
+                .desconto(-1.0)
+                .qtdIngressos(0)
+                .build());
+
+        showPostDto.getLote().add(loteX);
+
+        Show show = showRepository.save(Show.builder()
+                .dataShow(new Date("12/03/2023"))
+                .artista(artista)
+                .cache(100000)
+                .totalDespesas(30000)
+                .lote(new ArrayList<>())
+                .dataEspecial(true)
+                .build());
+
+        adicionarIngressos(qtdVIP, TipoIngresso.VIP, 200.0, loteX);
+        adicionarIngressos(qtdMeia, TipoIngresso.MEIA_ENTRADA, 50.0, loteX);
+        adicionarIngressos(qtdNormal, TipoIngresso.NORMAL, 100.0, loteX);
+    }
+
+    private void adicionarIngressos(int quantidade, TipoIngresso tipo, double preco, Lote loteX) throws Exception {
+        IntStream.range(0, quantidade).forEach(i -> {
+            try {
+                Ingresso ingresso1 = Ingresso.builder()
+                        .preco(preco)
+                        .tipo(tipo)
+                        .status(StatusIngresso.VENDIDO)
+                        .build();
+                Ingresso ingresso = ingressoRepository.save(ingresso1);
+                driver.perform(MockMvcRequestBuilders.patch(URI_INGRESSO + "/addIngresso/" + ingresso.getId() + "/" + loteX.getId())
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+            } catch (Exception e) {
+                fail("Erro ao adicionar ingresso", e);
+            }
+        });
+    }
 
     @Test
     @Order(1)
@@ -1105,85 +1183,6 @@ public class AVLTests {
                 .andDo(print())
                 .andReturn().getResponse().getContentAsString();
 
-    }
-
-    @Nested
-    @DisplayName("Testes de Quantidade de Ingressos")
-    class TesteQuantidadeIngressos {
-        @ParameterizedTest
-        @CsvSource({"20,10,70", "21,10,69", "25,10,65", "29,10,61"})
-        @DisplayName("Teste parametrizado de diferentes quantidades de ingressos")
-        @Order(1)
-        void testarDiferentesQuantidadesDeIngressos(int qtdVIP, int qtdMeia, int qtdNormal) throws Exception {
-            criarShowComIngressos(qtdVIP, qtdMeia, qtdNormal);
-        }
-    }
-
-    @DisplayName("Teste repetido para robustez")
-    @RepeatedTest(3)
-    @Timeout(5)
-    void testeRepetidoParaRobustez() throws Exception {
-        criarShowComIngressos(20, 10, 70);
-    }
-
-    private void criarShowComIngressos(int qtdVIP, int qtdMeia, int qtdNormal) throws Exception {
-        // Dados para os testes
-        Artista artista = artistaRepository.save(Artista.builder()
-                .id(1L)
-                .nome("Lucas")
-                .sobrenome("Pereira")
-                .nomeArtistico("Banda LuFi")
-                .genero("sertanejo")
-                .cpf("870.756.333-90")
-                .build());
-
-        ShowPostDto showPostDto = ShowPostDto.builder()
-                .dataShow(new Date("12/03/2023"))
-                .artista(artista)
-                .cache(100000)
-                .totalDespesas(30000)
-                .lote(new ArrayList<>())
-                .dataEspecial(true)
-                .build();
-
-        Lote loteX = loteRepository.save(Lote.builder()
-                .ingressos(new ArrayList<>())
-                .desconto(-1.0)
-                .qtdIngressos(0)
-                .build());
-
-        showPostDto.getLote().add(loteX);
-
-        Show show = showRepository.save(Show.builder()
-                .dataShow(new Date("12/03/2023"))
-                .artista(artista)
-                .cache(100000)
-                .totalDespesas(30000)
-                .lote(new ArrayList<>())
-                .dataEspecial(true)
-                .build());
-
-        adicionarIngressos(qtdVIP, TipoIngresso.VIP, 200.0, loteX);
-        adicionarIngressos(qtdMeia, TipoIngresso.MEIA_ENTRADA, 50.0, loteX);
-        adicionarIngressos(qtdNormal, TipoIngresso.NORMAL, 100.0, loteX);
-    }
-
-    private void adicionarIngressos(int quantidade, TipoIngresso tipo, double preco, Lote loteX) throws Exception {
-        IntStream.range(0, quantidade).forEach(i -> {
-            try {
-                Ingresso ingresso1 = Ingresso.builder()
-                        .preco(preco)
-                        .tipo(tipo)
-                        .status(StatusIngresso.VENDIDO)
-                        .build();
-                Ingresso ingresso = ingressoRepository.save(ingresso1);
-                driver.perform(MockMvcRequestBuilders.patch(URI_INGRESSO + "/addIngresso/" + ingresso.getId() + "/" + loteX.getId())
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
-            } catch (Exception e) {
-                fail("Erro ao adicionar ingresso", e);
-            }
-        });
     }
 
 
