@@ -40,3 +40,5 @@
 - `build`: alterações na estrutura do projeto
 - `chore`: alterações em pacotes, dependências
 - `ci`: alterações de integração contínua
+
+[Repositório com testes de Frontend com Cypress e Selenium](https://github.com/Vitoria-Maria0912/gui-testing-selenium-cypress.git)
